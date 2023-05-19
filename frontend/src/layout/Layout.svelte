@@ -1,0 +1,26 @@
+<script lang="ts">
+    import ViewController from "../components/viewController/viewController.svelte";
+    import SidePanel from "../components/sidePanel/SidePanel.svelte";
+    import Titlebar from "../components/titlebar/Titlebar.svelte";
+    import Toolsbar from "../components/toolbar/Toolbar.svelte";
+
+
+</script>
+
+<div class="layout">
+    <Titlebar />
+    <Toolsbar />
+    <SidePanel />
+    <ViewController />
+</div>
+
+<style lang="scss">
+    .layout {
+        display: grid;
+
+        grid-template-columns: clamp(20%, 30%, 30em) 1fr;
+        grid-template-rows: auto auto 1fr;
+        height: 100%;
+        width: 100%;
+    }
+</style>
