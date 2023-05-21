@@ -1,0 +1,25 @@
+.hoverable {
+    position: relative;
+}
+
+.hoverable::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    transition: background-color var(--speed1) ease;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.hoverable:focus-visible::before, 
+.hoverable:hover::before {
+    background-color: var(--hover);
+}
+
+button.hoverable:active::before {
+    background-color: var(--hover-active);
+}

@@ -1,0 +1,11 @@
+*.small {
+    --font-size: var(--font-small);
+}
+
+*.medium {
+    --font-size: var(--font-medium);
+}
+
+*.large {
+    --font-size: var(--font-large);
+}

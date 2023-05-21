@@ -1,0 +1,9 @@
+body.light {
+    --primary: #404048;
+    --on-primary: white;
+
+    --active: #20ff50;
+    --inactive: #ff2050;
+
+    --hover: rgba(255,255,255,0.05);
+}

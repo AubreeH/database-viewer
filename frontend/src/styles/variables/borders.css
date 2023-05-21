@@ -1,0 +1,4 @@
+body {
+    --border-outline: 1px solid var(--outline);
+    --border-dashed: 1px dashed var(--outline);
+}

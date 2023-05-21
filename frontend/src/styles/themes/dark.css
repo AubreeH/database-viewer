@@ -1,0 +1,17 @@
+body.dark {
+    --primary: #303038f0;
+    --on-primary: #d2d2d2;
+    --background: #303038eb;
+
+    --active: #20ff50;
+    --inactive: #ff2050;
+
+    --hover: rgba(255,255,255,0.05);
+    --hover-active: rgba(255,255,255,0.1);
+
+    --box-shadow-light: #d2d2d240;
+    --box-shadow-med: #d2d2d260;
+    --box-shadow-heavy: #d2d2d280;
+
+    --outline: #606070;
+}

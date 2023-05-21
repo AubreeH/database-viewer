@@ -1,6 +1,8 @@
 package main
 
 import (
+	connectionsbinding "changeme/src/bindings/connectionsBinding"
+	"context"
 	"embed"
 
 	"github.com/wailsapp/wails/v2"
@@ -15,6 +17,7 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+	conn, connContextCallback := connectionsbinding.NewConnectionsBinding()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -22,13 +25,17 @@ func main() {
 		Width:            1024,
 		Height:           768,
 		Frameless:        true,
-		BackgroundColour: &options.RGBA{R: 48, G: 48, B: 56, A: 200},
+		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		OnStartup: app.startup,
+		OnStartup: func(ctx context.Context) {
+			app.startup(ctx)
+			connContextCallback(ctx)
+		},
 		Bind: []interface{}{
 			app,
+			conn,
 		},
 		Linux: &linux.Options{
 			WindowIsTranslucent: true,

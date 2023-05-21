@@ -1,24 +1,38 @@
 <script lang="ts">
+    import { openNewSidePanel } from "../../../stores/sidePanel";
     import Icon from "../../common/icon/Icon.svelte";
+    import Test from "./Test.svelte";
+    import { DeleteConnection } from "../../../../wailsjs/go/connectionsbinding/ConnectionsBinding";
 
     export let name = "";
     export let details = "";
     export let connected = false;
+
+    function handleClick(e: MouseEvent) {
+        handleDeleteConnection();
+    }
+
+    function handleDeleteConnection() {
+        DeleteConnection(name);
+    }
 </script>
 
-<div class="side-panel-item hoverable">
+<button
+    class="side-panel-item hoverable primary"
+    on:click={handleClick}
+    on:dblclick={handleDeleteConnection}
+>
     <h4>{name}</h4>
     {#if connected}
-        <Icon>check_circle</Icon>
+        <Icon name="check_circle" />
     {/if}
     <p>{details}</p>
-</div>
+</button>
 
 <style lang="scss">
     .side-panel-item {
-        padding: .8em;
-        background-color: #404048;
-        border-radius: .5em;
+        padding: 0.8em;
+        background-color: var(--primary);
         display: grid;
         grid-template-columns: 1fr auto;
 
@@ -26,15 +40,13 @@
             text-align: left;
             margin: 0;
             text-transform: capitalize;
-            font-size: .9em;
 
             grid-column: 1;
             grid-row: 1;
         }
 
         & > :global(.icon) {
-            font-size: 1em;
-            color: #20ff50;
+            color: var(--active);
         }
 
         & > p {

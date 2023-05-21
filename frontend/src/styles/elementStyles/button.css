@@ -1,0 +1,33 @@
+button {
+    box-sizing: border-box;
+}
+
+button.primary {
+    height: fit-content;
+    min-width: 3em;
+    min-height: 2em;
+    padding: .75em 1em;
+
+    font-size: var(--font-size);
+
+    line-height: 1em;
+
+    margin: 0 2px;
+
+    background: var(--primary);
+    color: var(--on-primary);
+    border: var(--border-outline);
+    border-radius: .5em;
+
+    cursor: pointer;
+    transition: box-shadow var(--speed1) ease;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button:focus, button:focus-visible, button:hover {
+    box-shadow: var(--light-box-shadow);
+
+    outline: none;
+}
