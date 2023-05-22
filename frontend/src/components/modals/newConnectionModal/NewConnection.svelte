@@ -8,6 +8,7 @@
     let host: string = "";
     let port: string = "";
     let user: string = "";
+    let database: string = "";
 
     let loading = false;
 
@@ -20,6 +21,7 @@
                 host,
                 port,
                 user,
+                database,
             })
         );
 
@@ -47,6 +49,11 @@
     <div class="field">
         <label for="user-input">User: </label>
         <input id="user-input" bind:value={user} />
+    </div>
+
+    <div class="field">
+        <label for="database-input">Database: </label>
+        <input id="database-input" bind:value={database} />
     </div>
     <button on:click={handleCreateNewConnection} disabled={loading}>
         Create

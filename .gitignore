@@ -4,3 +4,4 @@ frontend/dist
 .vscode/
 *.env
 frontend/.vscode/
+vendor/

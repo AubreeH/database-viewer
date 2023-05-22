@@ -8,7 +8,7 @@
     import { connections } from "../../../wailsjs/go/models";
     import { LoadConnections } from "../../../wailsjs/go/connectionsbinding/ConnectionsBinding";
     import { openModal } from "../../stores/modal";
-    import NewConnection from "../modals/newConnectionModal/newConnection.svelte";
+    import NewConnection from "../modals/newConnectionModal/NewConnection.svelte";
     import { EventsOn } from "../../../wailsjs/runtime/runtime";
 
     let loading: boolean = true;
@@ -25,15 +25,16 @@
         connectionsList = await LoadConnections();
         loading = false;
         EventsOn("connections-updated", (data) => {
-            connectionsList = data.map((c) => new connections.Connection(c));
+            console.log(data);
+            if (Array.isArray(data)) {
+                connectionsList = data.map(
+                    (c) => new connections.Connection(c)
+                );
+            } else {
+                connectionsList = undefined;
+            }
         });
     });
-
-    $: sidePanelItems = !Array.isArray(connectionsList)
-        ? []
-        : connectionsList.map((c) => ({
-              name: c.name,
-          }));
 </script>
 
 <div class="side-panel">
@@ -53,9 +54,9 @@
                 this={$SidePanelStore.slice(-1)[0].component}
                 {...$SidePanelStore.slice(-1)[0]?.props ?? []}
             />
-        {:else}
-            {#each sidePanelItems as item}
-                <SidePanelItem {...item} />
+        {:else if Array.isArray(connectionsList)}
+            {#each connectionsList as connection}
+                <SidePanelItem {connection} />
             {/each}
         {/if}
     </div>

@@ -4,30 +4,41 @@ import (
 	"changeme/src/helpers"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 )
 
+// PasswordBehaviour describes different methods of behaviour for handling passwords when saving a connection.
+// Valid values are SaveAsPlainText, RequestOnConnect, EmptyString
 type PasswordBehaviour string
 
 const (
-	SaveAsPlainText  PasswordBehaviour = "save_as_plain_text"
-	RequestOnConnect                   = "request_on_connect"
-	EmptyString      PasswordBehaviour = "empty_string"
+	// SaveAsPlainText - Password is saved as plain text in the connections.json file.
+	SaveAsPlainText PasswordBehaviour = "save_as_plain_text"
+
+	// RequestOnConnect - Application will request for the password when attempting to connect to the database.
+	RequestOnConnect PasswordBehaviour = "request_on_connect"
+
+	// EmptyString - Application will use an empty string to connect to the database.
+	EmptyString PasswordBehaviour = "empty_string"
 )
 
+// Connection - The base struct for managing connections for this database viewer client.
 type Connection struct {
-	Name             string `json:"name"`
-	Host             string `json:"host"`
-	Port             string `json:"port"`
-	User             string `json:"user"`
-	Password         string `json:",omitempty"`
-	PasswordSaveType string `json:"password_save_type"`
-	SortOrder        int    `json:"sort_order"`
+	Name             string            `json:"name"`
+	Host             string            `json:"host"`
+	Port             string            `json:"port"`
+	Database         string            `json:"database"`
+	User             string            `json:"user"`
+	Password         string            `json:",omitempty"`
+	PasswordSaveType PasswordBehaviour `json:"password_save_type"`
+	SortOrder        int               `json:"sort_order"`
+	Connected        bool              `json:"connected"`
 }
 
+// Connections - Alias type for an array of Connection.
 type Connections []Connection
 
+// GetConnections returns all saved Connection values.
 func GetConnections() (Connections, error) {
 	connections := Connections{}
 	err := connections.LoadAll()
@@ -131,8 +142,12 @@ func (connections *Connections) LoadAll() error {
 }
 
 func (connections *Connections) saveAll() error {
-	fmt.Println(connections)
-	data, err := json.Marshal(connections)
+	var connectionsToSave Connections
+
+	for _, v := range *connections {
+		connectionsToSave = append(connectionsToSave, v.sanitizeForSaving())
+	}
+	data, err := json.Marshal(connectionsToSave)
 	if err != nil {
 		return err
 	}
@@ -161,8 +176,6 @@ func (connections *Connections) add(connection Connection) error {
 
 	connection.SortOrder = len(*connections)
 
-	fmt.Println(*connections)
-
 	*connections = append(*connections, connection)
 
 	return nil
@@ -170,10 +183,7 @@ func (connections *Connections) add(connection Connection) error {
 
 func (connections *Connections) updateConnection(connection Connection) error {
 	if !connections.overwriteConnectionInConnections(connection) {
-		fmt.Println("overwriteConnectionInConnections false")
 		connections.add(connection)
-	} else {
-		fmt.Println("overwriteConnectionInConnections true")
 	}
 
 	return connections.saveAll()
@@ -199,4 +209,30 @@ func (connections *Connections) overwriteConnectionInConnections(connection Conn
 	}
 
 	return false
+}
+
+func (connection *Connection) sanitizeForSaving() Connection {
+	name := connection.Name
+	host := connection.Host
+	port := connection.Port
+	user := connection.User
+	passwordSaveType := connection.PasswordSaveType
+	password := ""
+	connected := false
+	database := connection.Database
+
+	if passwordSaveType == SaveAsPlainText {
+		password = connection.Password
+	}
+
+	return Connection{
+		Name:             name,
+		Host:             host,
+		Port:             port,
+		User:             user,
+		PasswordSaveType: passwordSaveType,
+		Password:         password,
+		Connected:        connected,
+		Database:         database,
+	}
 }

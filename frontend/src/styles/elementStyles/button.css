@@ -24,6 +24,12 @@ button.primary {
 
     user-select: none;
     -webkit-user-select: none;
+
+    
+}
+
+button.primary * {
+    pointer-events: none;
 }
 
 button:focus, button:focus-visible, button:hover {
