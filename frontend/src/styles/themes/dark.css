@@ -2,6 +2,7 @@ body.dark {
     --primary: #303038f0;
     --on-primary: #d2d2d2;
     --background: #303038eb;
+    --primary-contrast: #383840eb;
 
     --active: #20ff50;
     --inactive: #ff2050;

@@ -1,23 +1,29 @@
 <script lang="ts">
-    import { Quit, WindowMinimise, WindowToggleMaximise } from "../../../wailsjs/runtime/runtime";
-
+    import {
+        Quit,
+        WindowMinimise,
+        WindowToggleMaximise,
+    } from "../../../wailsjs/runtime/runtime";
 
     import { handleTitlebarDoubleClick } from "./functions";
-
 </script>
 
 <div class="titlebar" on:dblclick={handleTitlebarDoubleClick}>
-    <div class="titlebar-start">
-
-    </div>
+    <div class="titlebar-start" />
     <div class="titlebar-end">
         <button class="titlebar-button hoverable icon primary" on:click={Quit}>
             close
         </button>
-        <button class="titlebar-button hoverable icon primary" on:click={WindowToggleMaximise}>
+        <button
+            class="titlebar-button hoverable icon primary"
+            on:click={WindowToggleMaximise}
+        >
             maximize
         </button>
-        <button class="titlebar-button hoverable icon primary" on:click={WindowMinimise}>
+        <button
+            class="titlebar-button hoverable icon primary"
+            on:click={WindowMinimise}
+        >
             minimize
         </button>
     </div>
@@ -29,18 +35,20 @@
         grid-row: 1;
         height: 2em;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        --wails-draggable:drag;
+        --wails-draggable: drag;
 
         display: flex;
         justify-content: space-between;
 
-        &, * {
+        &,
+        * {
             user-select: none;
             -webkit-user-select: none;
         }
     }
 
-    .titlebar-start, .titlebar-end {
+    .titlebar-start,
+    .titlebar-end {
         display: flex;
         width: fit-content;
         pointer-events: none;

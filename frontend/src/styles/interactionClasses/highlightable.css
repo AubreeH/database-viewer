@@ -1,0 +1,23 @@
+.highlightable, .highlighted {
+    position: relative;
+}
+
+.highlightable::before, .highlighted::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: background-color var(--speed1) ease;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.highlightable::before {
+    background-color: transparent;
+}
+
+.highlighted::before {
+    background-color: var(--hover);
+}

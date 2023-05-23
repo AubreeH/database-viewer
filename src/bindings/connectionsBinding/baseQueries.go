@@ -4,9 +4,6 @@ import (
 	"changeme/src/connections"
 	"changeme/src/db"
 	"errors"
-	"fmt"
-
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 func (c *ConnectionsBinding) GetTables(connection connections.Connection, filter string) ([]string, error) {
@@ -26,12 +23,10 @@ func (c *ConnectionsBinding) GetTables(connection connections.Connection, filter
 		var table string
 		err := rows.Scan(&table)
 		if err != nil {
-			runtime.LogDebug(c.ctx, err.Error())
 			return nil, err
 		}
 		tables = append(tables, table)
 	}
-	runtime.LogDebug(c.ctx, fmt.Sprint(tables))
 
 	return tables, nil
 }

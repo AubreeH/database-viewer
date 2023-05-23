@@ -10,13 +10,17 @@
     } from "../../../../wailsjs/go/connectionsbinding/ConnectionsBinding";
     import ContextMenu from "../../common/contextMenu/ContextMenu.svelte";
     import type { connections } from "../../../../wailsjs/go/models";
+    import TableList from "../../sidePanels/tableList/TableList.svelte";
 
     export let connection: connections.Connection = undefined;
 
-    function handleClick(e: MouseEvent) {
+    async function handleClick(e: MouseEvent) {
         openNewSidePanel({
-            component: Test,
-            name: connection.name,
+            component: TableList,
+            name: `Database: ${connection.name}`,
+            props: {
+                tables: (await handleGetTables()).map((t) => ({ name: t })),
+            },
         });
     }
 
@@ -31,6 +35,10 @@
     function handleDisconnection() {
         CloseConnection(connection);
     }
+
+    async function handleGetTables() {
+        return await GetTables(connection, "");
+    }
 </script>
 
 <ContextMenu
@@ -41,6 +49,7 @@
             ? { display: "Disconnect", handler: handleDisconnection }
             : { display: "Connect", handler: handleConnect },
         { display: "Delete", handler: handleDeleteConnection },
+        { display: "Get Tables", handler: handleGetTables },
     ]}
 >
     <button

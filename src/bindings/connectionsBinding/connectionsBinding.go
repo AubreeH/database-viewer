@@ -52,7 +52,6 @@ func (c *ConnectionsBinding) DeleteConnection(connection connections.Connection)
 
 func (c *ConnectionsBinding) OpenConnection(connection connections.Connection) error {
 	err := db.OpenConnection(connection)
-	runtime.LogDebug(c.ctx, fmt.Sprint(connection))
 	if err != nil {
 		return nil
 	}

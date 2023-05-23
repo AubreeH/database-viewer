@@ -1,11 +1,9 @@
 <script lang="ts">
-    import ViewController from "../components/viewController/viewController.svelte";
+    import ViewController from "../components/viewController/ViewController.svelte";
     import SidePanel from "../components/sidePanel/SidePanel.svelte";
     import Titlebar from "../components/titlebar/Titlebar.svelte";
     import Toolsbar from "../components/toolbar/Toolbar.svelte";
     import FooterBar from "../components/footerBar/FooterBar.svelte";
-
-
 </script>
 
 <div class="layout">

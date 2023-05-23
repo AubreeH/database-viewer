@@ -1,6 +1,9 @@
+<script lang="ts">
+    import Tabs from "./subcomponents/Tabs.svelte";
+</script>
 
 <div class="view">
-
+    <Tabs />
 </div>
 
 <style lang="scss">
