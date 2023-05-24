@@ -5,6 +5,15 @@ import type { IDisplayComponent } from "../types/componentTypes";
 export interface IModalType<T extends SvelteComponentTyped> extends IDisplayComponent<T> {
     title: string
     open?: boolean
+    size?: ModalSize
+}
+
+export enum ModalSize {
+    Fit = "modal-fit",
+    Small = "modal-small",
+    Medium = "modal-medium",
+    Large = "modal-large",
+    FullScreen = "modal-fullscreen",
 }
 
 export type ModalStoreType = IModalType<any>

@@ -6,6 +6,7 @@ export namespace connections {
 	    port: string;
 	    database: string;
 	    user: string;
+	    password?: string;
 	    password_save_type: string;
 	    sort_order: number;
 	    connected: boolean;
@@ -21,9 +22,26 @@ export namespace connections {
 	        this.port = source["port"];
 	        this.database = source["database"];
 	        this.user = source["user"];
+	        this.password = source["password"];
 	        this.password_save_type = source["password_save_type"];
 	        this.sort_order = source["sort_order"];
 	        this.connected = source["connected"];
+	    }
+	}
+	export class PasswordBehaviourDescription {
+	    behaviour: string;
+	    description: string;
+	    display: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new PasswordBehaviourDescription(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.behaviour = source["behaviour"];
+	        this.description = source["description"];
+	        this.display = source["display"];
 	    }
 	}
 

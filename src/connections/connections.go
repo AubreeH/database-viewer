@@ -1,10 +1,11 @@
 package connections
 
 import (
-	"changeme/src/helpers"
 	"encoding/json"
 	"errors"
 	"os"
+
+	"github.com/AubreeH/database-viewer/src/helpers"
 )
 
 // PasswordBehaviour describes different methods of behaviour for handling passwords when saving a connection.
@@ -22,6 +23,20 @@ const (
 	EmptyString PasswordBehaviour = "empty_string"
 )
 
+type PasswordBehaviourDescription struct {
+	Behaviour   PasswordBehaviour `json:"behaviour"`
+	Description string            `json:"description"`
+	Display     string            `json:"display"`
+}
+
+func GetPasswordBehaviours() []PasswordBehaviourDescription {
+	return []PasswordBehaviourDescription{
+		{Behaviour: SaveAsPlainText, Display: "Save As Plain Text", Description: "Password is saved as plain text in the connections.json file"},
+		{Behaviour: RequestOnConnect, Display: "Request Password On Connect", Description: "Application will request for the password when attempting to connect to the database"},
+		{Behaviour: EmptyString, Display: "Use Empty String", Description: "Application will use an empty string to connect to the database"},
+	}
+}
+
 // Connection - The base struct for managing connections for this database viewer client.
 type Connection struct {
 	Name             string            `json:"name"`
@@ -29,7 +44,7 @@ type Connection struct {
 	Port             string            `json:"port"`
 	Database         string            `json:"database"`
 	User             string            `json:"user"`
-	Password         string            `json:",omitempty"`
+	Password         string            `json:"password,omitempty"`
 	PasswordSaveType PasswordBehaviour `json:"password_save_type"`
 	SortOrder        int               `json:"sort_order"`
 	Connected        bool              `json:"connected"`
@@ -218,6 +233,9 @@ func (connection *Connection) sanitizeForSaving() Connection {
 	user := connection.User
 	passwordSaveType := connection.PasswordSaveType
 	password := ""
+	if passwordSaveType == SaveAsPlainText {
+		password = connection.Password
+	}
 	connected := false
 	database := connection.Database
 

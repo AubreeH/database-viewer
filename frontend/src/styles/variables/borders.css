@@ -1,4 +1,5 @@
 body {
     --border-outline: 1px solid var(--outline);
+    --border-outline-soft: 1px solid var(--outline-soft);
     --border-dashed: 1px dashed var(--outline);
 }

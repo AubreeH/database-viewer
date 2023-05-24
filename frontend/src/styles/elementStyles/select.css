@@ -1,0 +1,16 @@
+select.primary {
+    padding: .5em 1em;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--primary-contrast);
+    color: var(--on-primary);
+    border-radius: .5em;
+    border: var(--border-outline);
+    margin: 0;
+    appearance: none;
+}
+
+select.primary:focus-visible, select.primary:focus-within {
+    outline: none;
+    box-shadow: var(--light-box-shadow);
+}

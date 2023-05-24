@@ -1,4 +1,4 @@
-module changeme
+module github.com/AubreeH/database-viewer
 
 go 1.18
 

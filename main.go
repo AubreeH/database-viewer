@@ -1,9 +1,10 @@
 package main
 
 import (
-	connectionsbinding "changeme/src/bindings/connectionsBinding"
 	"context"
 	"embed"
+
+	"github.com/AubreeH/database-viewer/src/bindings/connectionsBinding"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -17,7 +18,7 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
-	conn, connContextCallback := connectionsbinding.NewConnectionsBinding()
+	conn, connContextCallback := connectionsBinding.NewConnectionsBinding()
 
 	// Create application with options
 	err := wails.Run(&options.App{

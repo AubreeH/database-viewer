@@ -1,10 +1,11 @@
-package connectionsbinding
+package connectionsBinding
 
 import (
-	"changeme/src/connections"
-	"changeme/src/db"
 	"context"
 	"fmt"
+
+	"github.com/AubreeH/database-viewer/src/connections"
+	"github.com/AubreeH/database-viewer/src/db"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -85,9 +86,13 @@ func (c *ConnectionsBinding) getConnections() (connections.Connections, error) {
 	}
 
 	for i, v := range connections {
-		_, ok := db.GetDatabaseConnection(v)
+		_, ok := db.GetOpenDatabaseConnection(v)
 		connections[i].Connected = ok
 	}
 
 	return connections, nil
+}
+
+func (c *ConnectionsBinding) GetPasswordBehaviours() []connections.PasswordBehaviourDescription {
+	return connections.GetPasswordBehaviours()
 }

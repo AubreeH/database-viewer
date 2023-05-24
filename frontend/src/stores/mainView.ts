@@ -48,12 +48,30 @@ export function closeTab(index: number) {
 }
 
 export function focusTab(index: number) {
-    MainViewStore.update(value => ({...value, activeTab: index}))
+    MainViewStore.update(value => {
+        if (index < 0) {
+            return value
+        }
+
+        if (index >= value?.tabs?.length ?? 0) {
+            return value
+        }
+
+        return ({...value, activeTab: index})
+    })
 }
 
 export function closeFocusedTab() {
     MainViewStore.update(value => {
         if(value.activeTab !== -1) {
+            if (!value.tabs.length) {
+                return {
+                    ...value,
+                    tabs: [],
+                    activeTab: -1,
+                }
+            }
+
             const newTabs = [...value.tabs]
             newTabs.splice(value.activeTab, 1)
             let activeTab = value.activeTab > newTabs.length - 1 ? newTabs.length - 1 : value.activeTab

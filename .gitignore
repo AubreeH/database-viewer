@@ -5,3 +5,5 @@ frontend/dist
 *.env
 frontend/.vscode/
 vendor/
+frontend/bin/
+frontend/pkg/
