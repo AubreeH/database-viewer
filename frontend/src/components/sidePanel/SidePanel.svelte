@@ -43,7 +43,7 @@
 			</h4>
 		</div>
 	{/if}
-	<div class="side-panel-main">
+	<div class="side-panel-main hidden-scrollbar">
 		{#if Array.isArray($SidePanelStore) && $SidePanelStore.length}
 			<svelte:component
 				this={$SidePanelStore.slice(-1)[0].component}
@@ -70,7 +70,10 @@
 
 <style lang="scss">
 	.side-panel {
+		max-height: 100%;
 		height: 100%;
+		overflow-y: auto;
+
 		width: 100%;
 		padding: 1em;
 
@@ -98,6 +101,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1em;
+
+		overflow-y: auto;
 	}
 
 	.side-panel-footer {

@@ -7,3 +7,4 @@ frontend/.vscode/
 vendor/
 frontend/bin/
 frontend/pkg/
+connections.json
