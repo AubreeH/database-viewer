@@ -15,3 +15,19 @@ to this in your browser, and you can call your Go code from devtools.
 
 To build a redistributable, production mode package, use `wails build`.
 # database-viewer
+
+## TODO
+### This is a list of features that I plan to implement.
+
+Allow for database connections over ssh proxy.
+Implement "Ask on connect" password behaviour.
+Display column info in table view.
+Allow for opening table through foreign key link.
+Load data from tables.
+Display data in table view.
+Allow for editing of data.
+Add actions for deleting/modifying row.
+Allow for copying/pasting of data in table view (csv).
+Add csv importing view.
+Add bulk actions.
+Add custom query view.
