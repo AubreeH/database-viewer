@@ -44,8 +44,9 @@ func (q *QueryBinding) GetTables(connection connections.Connection, filter strin
 }
 
 type DatabaseColumn struct {
-	Column QueryResultColumn
-	Index  *QueryResultIndex
+	Column     QueryResultColumn
+	Index      *QueryResultIndex
+	ForeignKey *QueryResultKeyColumnUsage
 }
 
 type QueryResultColumn struct {
@@ -73,6 +74,21 @@ type QueryResultIndex struct {
 	IndexComment sql.NullString
 }
 
+type QueryResultKeyColumnUsage struct {
+	ConstrainCatalog           string
+	ConstraintSchema           string
+	ConstraintName             string
+	TableCatalog               string
+	TableSchema                string
+	TableName                  string
+	ColumnName                 string
+	OrdinalPosition            int64
+	PositionInUniqueConstraint sql.NullInt64
+	ReferencedTableSchema      sql.NullString
+	ReferencedTableName        sql.NullString
+	ReferencedColumnName       sql.NullString
+}
+
 func (q *QueryBinding) GetTableData(connection connections.Connection, table string) ([]DatabaseColumn, error) {
 	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
@@ -89,8 +105,12 @@ func (q *QueryBinding) GetTableData(connection connections.Connection, table str
 		return nil, err
 	}
 
-	var databaseColumns []DatabaseColumn
+	keyColumnUsages, err := q.getKeyColumnUsage(dbConnection, table)
+	if err != nil {
+		return nil, err
+	}
 
+	var databaseColumns []DatabaseColumn
 	for _, c := range columns {
 		column := DatabaseColumn{
 			Column: c,
@@ -98,6 +118,11 @@ func (q *QueryBinding) GetTableData(connection connections.Connection, table str
 		for _, i := range indexes {
 			if i.ColumnName == c.Field {
 				column.Index = &i
+			}
+		}
+		for _, i := range keyColumnUsages {
+			if i.ColumnName == c.Field {
+				column.ForeignKey = &i
 			}
 		}
 		databaseColumns = append(databaseColumns, column)
@@ -162,6 +187,36 @@ func (c *QueryBinding) getTableIndexes(dbConnection *database.Database, table st
 	return indexes, nil
 }
 
-func (c *QueryBinding) getKeyColumnUsage(dbConnection *database.Database, table string, key string) {
+func (c *QueryBinding) getKeyColumnUsage(dbConnection *database.Database, table string) ([]QueryResultKeyColumnUsage, error) {
+	rows, err := dbConnection.Db.Query("SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_NAME = ?", table)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
+	var results []QueryResultKeyColumnUsage
+
+	for rows.Next() {
+		var result QueryResultKeyColumnUsage
+		err := rows.Scan(
+			&result.ConstrainCatalog,
+			&result.ConstraintSchema,
+			&result.ConstraintName,
+			&result.TableCatalog,
+			&result.TableSchema,
+			&result.TableName,
+			&result.ColumnName,
+			&result.OrdinalPosition,
+			&result.PositionInUniqueConstraint,
+			&result.ReferencedTableSchema,
+			&result.ReferencedTableName,
+			&result.ReferencedColumnName,
+		)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, result)
+	}
+
+	return results, nil
 }

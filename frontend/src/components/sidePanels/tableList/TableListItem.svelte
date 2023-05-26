@@ -1,29 +1,21 @@
 <script lang="ts">
 	import ContextMenu from "../../common/contextMenu/ContextMenu.svelte";
 	import type { connections } from "../../../../wailsjs/go/models";
-	import { openNewTabFocused, openTabFocused } from "../../../stores/mainView";
-	import TableView from "../../views/tableView/TableView.svelte";
+	import {
+		openNewTableViewTab,
+		openTableViewTab,
+	} from "../../../stores/mainView";
 	import type { IDatabaseTable } from "./types";
 
 	export let table: IDatabaseTable;
 	export let connection: connections.Connection;
 
 	function handleClick() {
-		openTabFocused({
-			component: TableView,
-			props: { table, connection },
-			name: `Table: ${table.name}`,
-			id: table.name,
-		});
+		openTableViewTab(connection, table.name);
 	}
 
 	function handleOpenNew() {
-		openNewTabFocused({
-			component: TableView,
-			props: { table, connection },
-			name: `Table: ${table.name}`,
-			id: table.name,
-		});
+		openNewTableViewTab(connection, table.name);
 	}
 </script>
 

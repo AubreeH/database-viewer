@@ -1,6 +1,5 @@
 export interface IDatabaseTable {
     name: string,
-    columns?: ITableColumn[],
 }
 
 export interface ITableColumn {

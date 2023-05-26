@@ -1,6 +1,8 @@
 import type { SvelteComponentTyped } from "svelte";
 import { get, writable } from "svelte/store";
 import type { IDisplayComponent } from "../types/componentTypes";
+import type { connections } from "../../wailsjs/go/models";
+import TableView from "../../src/components/views/tableView/TableView.svelte";
 
 export interface ITab<T extends SvelteComponentTyped = SvelteComponentTyped> extends IDisplayComponent<T> {
     id: string
@@ -124,4 +126,22 @@ export function closeFocusedTab() {
 
         return value
     })
+}
+
+export function openTableViewTab(connection: connections.Connection, table: string) {
+    openTabFocused({
+        component: TableView,
+        props: { table: {name: table}, connection },
+        name: `Table: ${table}`,
+        id: table,
+    });
+}
+
+export function openNewTableViewTab(connection: connections.Connection, table: string) {
+    openNewTabFocused({
+        component: TableView,
+        props: { table: {name: table}, connection },
+        name: `Table: ${table}`,
+        id: table,
+    });
 }
