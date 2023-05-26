@@ -2,12 +2,9 @@ package connectionsBinding
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/AubreeH/database-viewer/src/db"
-
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type ConnectionsBinding struct {
@@ -20,7 +17,7 @@ func NewConnectionsBinding() (*ConnectionsBinding, func(context.Context)) {
 }
 
 func (c *ConnectionsBinding) LoadConnections() ([]connections.Connection, error) {
-	return c.getConnections()
+	return db.GetConnections()
 }
 
 func (c *ConnectionsBinding) SaveConnection(connection connections.Connection) error {
@@ -29,7 +26,7 @@ func (c *ConnectionsBinding) SaveConnection(connection connections.Connection) e
 		return err
 	}
 
-	return c.emitConnectionsUpdate()
+	return db.EmitConnectionsUpdate(c.ctx)
 }
 
 func (c *ConnectionsBinding) DeleteConnection(connection connections.Connection) error {
@@ -48,49 +45,15 @@ func (c *ConnectionsBinding) DeleteConnection(connection connections.Connection)
 		return err
 	}
 
-	return c.emitConnectionsUpdate()
+	return db.EmitConnectionsUpdate(c.ctx)
 }
 
 func (c *ConnectionsBinding) OpenConnection(connection connections.Connection) error {
-	err := db.OpenConnection(connection)
-	if err != nil {
-		return nil
-	}
-	fmt.Println("test123")
-	return c.emitConnectionsUpdate()
+	return db.OpenConnection(c.ctx, connection)
 }
 
 func (c *ConnectionsBinding) CloseConnection(connection connections.Connection) error {
-	err := db.CloseConnection(connection)
-	if err != nil {
-		return nil
-	}
-	return c.emitConnectionsUpdate()
-}
-
-func (c *ConnectionsBinding) emitConnectionsUpdate() error {
-	cl, err := c.getConnections()
-	if err != nil {
-		return err
-	}
-
-	runtime.EventsEmit(c.ctx, "connections-updated", cl)
-
-	return nil
-}
-
-func (c *ConnectionsBinding) getConnections() (connections.Connections, error) {
-	connections, err := connections.GetConnections()
-	if err != nil {
-		return nil, err
-	}
-
-	for i, v := range connections {
-		_, ok := db.GetOpenDatabaseConnection(v)
-		connections[i].Connected = ok
-	}
-
-	return connections, nil
+	return db.CloseConnection(c.ctx, connection)
 }
 
 func (c *ConnectionsBinding) GetPasswordBehaviours() []connections.PasswordBehaviourDescription {

@@ -4,9 +4,9 @@
 	import {
 		CloseConnection,
 		DeleteConnection,
-		GetTables,
 		OpenConnection,
 	} from "../../../../wailsjs/go/connectionsBinding/ConnectionsBinding";
+	import { GetTables } from "../../../../wailsjs/go/queryBinding/QueryBinding";
 	import ContextMenu from "../../common/contextMenu/ContextMenu.svelte";
 	import type { connections } from "../../../../wailsjs/go/models";
 	import TableList from "../../sidePanels/tableList/TableList.svelte";
@@ -83,7 +83,6 @@
 			text-align: left;
 			margin: 0;
 			text-transform: capitalize;
-
 			grid-column: 1;
 			grid-row: 1;
 		}

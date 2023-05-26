@@ -1,21 +1,24 @@
 package db
 
 import (
+	"context"
+
 	"github.com/AubreeH/database-viewer/src/connections"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/AubreeH/goApiDb/database"
 )
 
 var databaseConnections map[string]*database.Database
 
-func GetDatabaseConnection(connection connections.Connection) (*database.Database, error) {
+func GetDatabaseConnection(ctx context.Context, connection connections.Connection) (*database.Database, error) {
 	db, ok := databaseConnections[connection.Name]
 
 	if ok {
 		return db, nil
 	}
 
-	err := OpenConnection(connection)
+	err := OpenConnection(ctx, connection)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +31,7 @@ func GetOpenDatabaseConnection(connection connections.Connection) (*database.Dat
 	return db, ok
 }
 
-func OpenConnection(connection connections.Connection) error {
+func OpenConnection(ctx context.Context, connection connections.Connection) error {
 	db, err := database.SetupDatabase(database.Config{
 		Host:     connection.Host,
 		Port:     connection.Port,
@@ -47,10 +50,10 @@ func OpenConnection(connection connections.Connection) error {
 
 	databaseConnections[connection.Name] = db
 
-	return nil
+	return EmitConnectionsUpdate(ctx)
 }
 
-func CloseConnection(connection connections.Connection) error {
+func CloseConnection(ctx context.Context, connection connections.Connection) error {
 	db, ok := GetOpenDatabaseConnection(connection)
 	if !ok {
 		return nil
@@ -63,5 +66,30 @@ func CloseConnection(connection connections.Connection) error {
 
 	delete(databaseConnections, connection.Name)
 
+	return EmitConnectionsUpdate(ctx)
+}
+
+func EmitConnectionsUpdate(ctx context.Context) error {
+	cl, err := GetConnections()
+	if err != nil {
+		return err
+	}
+
+	runtime.EventsEmit(ctx, "connections-updated", cl)
+
 	return nil
+}
+
+func GetConnections() (connections.Connections, error) {
+	connections, err := connections.GetConnections()
+	if err != nil {
+		return nil, err
+	}
+
+	for i, v := range connections {
+		_, ok := GetOpenDatabaseConnection(v)
+		connections[i].Connected = ok
+	}
+
+	return connections, nil
 }

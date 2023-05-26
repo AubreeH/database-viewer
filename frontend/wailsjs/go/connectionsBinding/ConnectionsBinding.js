@@ -14,14 +14,6 @@ export function GetPasswordBehaviours() {
   return window['go']['connectionsBinding']['ConnectionsBinding']['GetPasswordBehaviours']();
 }
 
-export function GetTableData(arg1, arg2) {
-  return window['go']['connectionsBinding']['ConnectionsBinding']['GetTableData'](arg1, arg2);
-}
-
-export function GetTables(arg1, arg2) {
-  return window['go']['connectionsBinding']['ConnectionsBinding']['GetTables'](arg1, arg2);
-}
-
 export function LoadConnections() {
   return window['go']['connectionsBinding']['ConnectionsBinding']['LoadConnections']();
 }

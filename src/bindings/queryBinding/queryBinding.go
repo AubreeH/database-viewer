@@ -1,6 +1,7 @@
-package connectionsBinding
+package queryBinding
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/AubreeH/database-viewer/src/connections"
@@ -8,12 +9,20 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func (c *ConnectionsBinding) GetTables(connection connections.Connection, filter string) ([]string, error) {
-	dbConnection, err := db.GetDatabaseConnection(connection)
+type QueryBinding struct {
+	ctx context.Context
+}
+
+func NewQueryBinding() (*QueryBinding, func(context.Context)) {
+	query := &QueryBinding{}
+	return query, func(c context.Context) { query.ctx = c }
+}
+
+func (q *QueryBinding) GetTables(connection connections.Connection, filter string) ([]string, error) {
+	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
 		return nil, err
 	}
-	c.emitConnectionsUpdate()
 	rows, err := dbConnection.Db.Query("SHOW TABLES")
 	if err != nil {
 		return nil, err
@@ -64,19 +73,18 @@ type QueryResultIndex struct {
 	IndexComment sql.NullString
 }
 
-func (c *ConnectionsBinding) GetTableData(connection connections.Connection, table string) ([]DatabaseColumn, error) {
-	dbConnection, err := db.GetDatabaseConnection(connection)
-	if err != nil {
-		return nil, err
-	}
-	c.emitConnectionsUpdate()
-
-	columns, err := c.getTableColumns(dbConnection, table)
+func (q *QueryBinding) GetTableData(connection connections.Connection, table string) ([]DatabaseColumn, error) {
+	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
 		return nil, err
 	}
 
-	indexes, err := c.getTableIndexes(dbConnection, table)
+	columns, err := q.getTableColumns(dbConnection, table)
+	if err != nil {
+		return nil, err
+	}
+
+	indexes, err := q.getTableIndexes(dbConnection, table)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +106,7 @@ func (c *ConnectionsBinding) GetTableData(connection connections.Connection, tab
 	return databaseColumns, nil
 }
 
-func (c *ConnectionsBinding) getTableColumns(dbConnection *database.Database, table string) ([]QueryResultColumn, error) {
+func (q *QueryBinding) getTableColumns(dbConnection *database.Database, table string) ([]QueryResultColumn, error) {
 	rows, err := dbConnection.Db.Query("SHOW COLUMNS FROM " + table)
 	if err != nil {
 		return nil, err
@@ -119,7 +127,7 @@ func (c *ConnectionsBinding) getTableColumns(dbConnection *database.Database, ta
 	return columns, nil
 }
 
-func (c *ConnectionsBinding) getTableIndexes(dbConnection *database.Database, table string) ([]QueryResultIndex, error) {
+func (c *QueryBinding) getTableIndexes(dbConnection *database.Database, table string) ([]QueryResultIndex, error) {
 	rows, err := dbConnection.Db.Query("SHOW INDEXES FROM " + table)
 	if err != nil {
 		return nil, err
@@ -154,6 +162,6 @@ func (c *ConnectionsBinding) getTableIndexes(dbConnection *database.Database, ta
 	return indexes, nil
 }
 
-func (c *ConnectionsBinding) getKeyColumnUsage(dbConnection *database.Database, table string, key string) {
+func (c *QueryBinding) getKeyColumnUsage(dbConnection *database.Database, table string, key string) {
 
 }

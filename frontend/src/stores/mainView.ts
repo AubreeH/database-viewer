@@ -1,9 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import type { IDisplayComponent } from "../types/componentTypes";
 
+export interface ITab<T extends SvelteComponentTyped = SvelteComponentTyped> extends IDisplayComponent<T> {
+    id: string
+}
+
 export interface IMainViewStore {
-    tabs: IDisplayComponent<any>[],
+    tabs: ITab[],
     activeTab: number
 }
 
@@ -12,14 +16,49 @@ export const MainViewStore = writable<IMainViewStore>({
     activeTab: -1,
 })
 
-export function openTabInBackground<T extends SvelteComponentTyped>(component: IDisplayComponent<T>) {
+export function openTabInBackground<T extends SvelteComponentTyped>(component: ITab<T>) {
     MainViewStore.update(value => ({
         ...value,
         tabs: [...value.tabs, component],
     }))
 }
 
-export function openTabFocused<T extends SvelteComponentTyped>(component: IDisplayComponent<T>) {
+export function openTabFocused<T extends SvelteComponentTyped>(component: ITab<T>) {
+    if (!component.id) {
+        return
+    }
+    
+    const storeValue = get(MainViewStore)
+    if (Array.isArray(storeValue.tabs)) {
+        let activeTab = storeValue.tabs[storeValue.activeTab]
+        let firstFindIndex = undefined
+        const existingTabIndex = storeValue.tabs.findIndex((t, i) => {
+            if (t.id === component.id) {
+                if (activeTab.id !== component.id) {
+                    return true
+                } else if(firstFindIndex === undefined) {
+                    firstFindIndex = i
+                    return false
+                } else if (i > storeValue.activeTab) {
+                    return true
+                }
+            }
+
+            return false
+        })
+        if (existingTabIndex !== -1) {
+            focusTab(existingTabIndex)
+            return
+        } else if (firstFindIndex !== undefined && firstFindIndex !== -1) {
+            focusTab(firstFindIndex)
+            return
+        }
+    }
+
+    openNewTabFocused(component)
+}
+
+export function openNewTabFocused<T extends SvelteComponentTyped>(component: ITab<T>) {
     MainViewStore.update(value => {
         const newTabs = [...value.tabs]
         let activeTab = value.activeTab + 1

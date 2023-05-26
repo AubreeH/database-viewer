@@ -5,6 +5,7 @@ import (
 	"embed"
 
 	"github.com/AubreeH/database-viewer/src/bindings/connectionsBinding"
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -19,6 +20,7 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 	conn, connContextCallback := connectionsBinding.NewConnectionsBinding()
+	query, queryContextCallback := queryBinding.NewQueryBinding()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -33,10 +35,12 @@ func main() {
 		OnStartup: func(ctx context.Context) {
 			app.startup(ctx)
 			connContextCallback(ctx)
+			queryContextCallback(ctx)
 		},
 		Bind: []interface{}{
 			app,
 			conn,
+			query,
 		},
 		Linux: &linux.Options{
 			WindowIsTranslucent: true,

@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { connections } from "../../../../wailsjs/go/models";
-	import type { connectionsBinding } from "../../../../wailsjs/go/models";
+	import { GetTableData } from "../../../../wailsjs/go/queryBinding/QueryBinding";
+	import type {
+		connections,
+		queryBinding,
+	} from "../../../../wailsjs/go/models";
 	import type { IDatabaseTable } from "../../sidePanels/tableList/types";
-	import { GetTableData } from "../../../../wailsjs/go/connectionsBinding/ConnectionsBinding";
 
 	export let connection: connections.Connection;
 	export let table: IDatabaseTable;
 
-	let columns: connectionsBinding.DatabaseColumn = undefined;
+	let columns: queryBinding.DatabaseColumn = undefined;
 
 	$: getTableData(connection, table.name);
 
