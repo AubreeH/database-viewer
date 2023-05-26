@@ -1,0 +1,12 @@
+body {
+    --info-notification-fg: #fff;
+    --info-notification-bg: #25d;
+    --success-notification-fg: #fff;
+    --success-notification-bg: #4a4;
+    --warning-notification-fg: #fff;
+    --warning-notification-bg: #fc2;
+    --error-notification-fg: #fff;
+    --error-notification-bg: #c22;
+    --fatal-notification-fg: #fff;
+    --fatal-notification-bg: #222;
+}

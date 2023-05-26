@@ -12,6 +12,27 @@
     url("../assets/fonts/nunito-v16-latin-regular.woff2") format("woff2");
 }
 
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src: local(""),
+    url("../assets/fonts/OpenSans-Normal.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: italic;
+    src: local(""),
+    url("../assets/fonts/OpenSans-Italic.ttf") format("ttf");
+}
+
+@font-face {
+    font-family: "Material Symbols Outlined";
+    font-style: normal;
+    src: local(""),
+    url("../assets/fonts/MaterialSymbolsOutlined.ttf") format("truetype");
+}
+
 body {
     --font-size: var(--font-medium);
     font-size: var(--font-size)

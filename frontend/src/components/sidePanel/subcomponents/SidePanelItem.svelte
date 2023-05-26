@@ -1,29 +1,34 @@
 <script lang="ts">
 	import { openNewSidePanel } from "../../../stores/sidePanel";
 	import Icon from "../../common/icon/Icon.svelte";
-	import {
-		CloseConnection,
-		DeleteConnection,
-		OpenConnection,
-	} from "../../../../wailsjs/go/connectionsBinding/ConnectionsBinding";
+	import { CloseConnection, DeleteConnection, OpenConnection } from "../../../../wailsjs/go/connectionsBinding/ConnectionsBinding";
 	import { GetTables } from "../../../../wailsjs/go/queryBinding/QueryBinding";
 	import ContextMenu from "../../common/contextMenu/ContextMenu.svelte";
 	import type { connections } from "../../../../wailsjs/go/models";
 	import TableList from "../../sidePanels/tableList/TableList.svelte";
 	import { openModal } from "../../../stores/modal";
-	import ModifyConnectionModal from "../../../components/modals/newConnectionModal/ModifyConnectionModal.svelte";
+	import ModifyConnectionModal from "../../modals/newConnectionModal/ModifyConnectionModal.svelte";
+	import { getNotificationContext } from "../../notifications/functions";
 
 	export let connection: connections.Connection = undefined;
 
+	const { sendErrorNotification } = getNotificationContext();
+
 	async function handleClick(e: MouseEvent) {
-		openNewSidePanel({
-			component: TableList,
-			name: `Database: ${connection.name}`,
-			props: {
-				connection,
-				tables: (await GetTables(connection, "")).map((t) => ({ name: t })),
-			},
-		});
+		try {
+			openNewSidePanel({
+				component: TableList,
+				name: `Database: ${connection.name}`,
+				props: {
+					connection,
+					tables: (await GetTables(connection, "")).map((t) => ({ name: t })),
+				},
+			});
+		} catch (e) {
+			sendErrorNotification({
+				message: "An error occurred whilst establishing connection with " + connection.name,
+			});
+		}
 	}
 
 	function handleDeleteConnection() {
@@ -31,7 +36,13 @@
 	}
 
 	function handleConnect() {
-		OpenConnection(connection);
+		try {
+			OpenConnection(connection);
+		} catch (e) {
+			sendErrorNotification({
+				message: "An error occurred whilst establishing connection with " + connection.name,
+			});
+		}
 	}
 
 	function handleDisconnection() {
@@ -51,19 +62,12 @@
 	id={`side-panel-item-${connection.name}`}
 	let:contextmenu
 	options={[
-		connection.connected
-			? { display: "Disconnect", handler: handleDisconnection }
-			: { display: "Connect", handler: handleConnect },
+		connection.connected ? { display: "Disconnect", handler: handleDisconnection } : { display: "Connect", handler: handleConnect },
 		{ display: "Delete", handler: handleDeleteConnection },
 		{ display: "Edit", handler: handleEditConnection },
 	]}
 >
-	<button
-		{...contextmenu}
-		class="side-panel-item hoverable primary"
-		on:click={handleClick}
-		on:dblclick={handleDeleteConnection}
-	>
+	<button {...contextmenu} class="side-panel-item hoverable primary" on:click={handleClick}>
 		<h4>{connection.name}</h4>
 		{#if connection.connected}
 			<Icon name="check_circle" />

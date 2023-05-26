@@ -8,9 +8,12 @@
 	import { openModal } from "../../stores/modal";
 	import ModifyConnectionModal from "../modals/newConnectionModal/ModifyConnectionModal.svelte";
 	import { EventsOn } from "../../../wailsjs/runtime/runtime";
+	import { getNotificationContext } from "../notifications/functions";
 
 	let loading: boolean = true;
 	let connectionsList: connections.Connection[] = undefined;
+
+	const { sendFatalNotification } = getNotificationContext();
 
 	function handleOpenCreateNewConnectionModal() {
 		openModal({
@@ -20,15 +23,21 @@
 	}
 
 	onMount(async () => {
-		connectionsList = await LoadConnections();
-		loading = false;
-		EventsOn("connections-updated", (data) => {
-			if (Array.isArray(data)) {
-				connectionsList = data.map((c) => new connections.Connection(c));
-			} else {
-				connectionsList = undefined;
-			}
-		});
+		try {
+			connectionsList = await LoadConnections();
+			loading = false;
+			EventsOn("connections-updated", (data) => {
+				if (Array.isArray(data)) {
+					connectionsList = data.map((c) => new connections.Connection(c));
+				} else {
+					connectionsList = undefined;
+				}
+			});
+		} catch (e) {
+			sendFatalNotification({
+				message: "",
+			});
+		}
 	});
 </script>
 
@@ -45,10 +54,7 @@
 	{/if}
 	<div class="side-panel-main hidden-scrollbar">
 		{#if Array.isArray($SidePanelStore) && $SidePanelStore.length}
-			<svelte:component
-				this={$SidePanelStore.slice(-1)[0].component}
-				{...$SidePanelStore.slice(-1)[0]?.props ?? []}
-			/>
+			<svelte:component this={$SidePanelStore.slice(-1)[0].component} {...$SidePanelStore.slice(-1)[0]?.props ?? []} />
 		{:else if Array.isArray(connectionsList)}
 			{#each connectionsList as connection}
 				<SidePanelItem {connection} />
@@ -57,13 +63,7 @@
 	</div>
 	{#if !Array.isArray($SidePanelStore) || !$SidePanelStore.length}
 		<div class="side-panel-footer">
-			<button
-				class="small icon hoverable primary"
-				title="New Connection"
-				on:click={handleOpenCreateNewConnectionModal}
-			>
-				add
-			</button>
+			<button class="small icon hoverable primary" title="New Connection" on:click={handleOpenCreateNewConnectionModal}> add </button>
 		</div>
 	{/if}
 </div>

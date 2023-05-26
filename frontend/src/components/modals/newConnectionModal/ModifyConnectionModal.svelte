@@ -82,7 +82,7 @@
 	$: console.log(selectedBehaviour, connection);
 </script>
 
-<div class="create-new-connection-form">
+<form class="create-new-connection-form" on:submit={handleSaveConnection}>
 	<div class="field">
 		<label for="name-input">Connection Name: </label>
 		<input id="name-input" class="primary" bind:value={name} />
@@ -129,10 +129,8 @@
 		</div>
 	{/if}
 
-	<button on:click={handleSaveConnection} class="primary" disabled={loading}>
-		Save
-	</button>
-</div>
+	<button type="submit" class="primary" disabled={loading}> Save </button>
+</form>
 
 <style lang="scss">
 	.create-new-connection-form {
