@@ -38,6 +38,7 @@ func OpenConnection(ctx context.Context, connection connections.Connection) erro
 		Name:     connection.Database,
 		User:     connection.User,
 		Password: connection.Password,
+		Driver:   database.DriverType(connection.Driver),
 	})
 
 	if err != nil {

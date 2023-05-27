@@ -4,10 +4,14 @@ go 1.18
 
 require github.com/wailsapp/wails/v2 v2.5.1
 
-require github.com/go-sql-driver/mysql v1.7.0 // indirect
+require (
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/lib/pq v1.10.9 // indirect
+	github.com/mattn/go-sqlite3 v1.14.16 // indirect
+)
 
 require (
-	github.com/AubreeH/goApiDb v0.1.17
+	github.com/AubreeH/goApiDb v0.1.18
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/google/uuid v1.1.2 // indirect

@@ -11,7 +11,6 @@
 	const dispatch = createEventDispatcher();
 
 	function handleSelect(e: SelectEvent) {
-		console.log(e);
 		if (e?.currentTarget?.value) {
 			dispatch("select", getOption(e.currentTarget.value));
 		}
@@ -22,13 +21,7 @@
 	}
 </script>
 
-<select
-	class="primary"
-	placeholder="Please select a value..."
-	{...props}
-	on:change={handleSelect}
-	bind:value
->
+<select class="primary" placeholder="Please select a value..." {...props} on:change={handleSelect} bind:value>
 	{#if Array.isArray(options)}
 		{#if !value}
 			<option value="" disabled selected> Please select a value... </option>

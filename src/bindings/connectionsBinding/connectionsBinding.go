@@ -3,6 +3,8 @@ package connectionsBinding
 import (
 	"context"
 
+	"github.com/AubreeH/goApiDb/database"
+
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/AubreeH/database-viewer/src/db"
 )
@@ -58,4 +60,13 @@ func (c *ConnectionsBinding) CloseConnection(connection connections.Connection) 
 
 func (c *ConnectionsBinding) GetPasswordBehaviours() []connections.PasswordBehaviourDescription {
 	return connections.GetPasswordBehaviours()
+}
+
+func (c *ConnectionsBinding) GetSupportedDrivers() map[string]database.DriverType {
+	return map[string]database.DriverType{
+		"MySql":      database.MySql,
+		"MariaDB":    database.MariaDB,
+		"PostgreSQL": database.Postgres,
+		"SQLite":     database.SQLite,
+	}
 }

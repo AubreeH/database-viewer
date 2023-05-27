@@ -14,6 +14,10 @@ export function GetPasswordBehaviours() {
   return window['go']['connectionsBinding']['ConnectionsBinding']['GetPasswordBehaviours']();
 }
 
+export function GetSupportedDrivers() {
+  return window['go']['connectionsBinding']['ConnectionsBinding']['GetSupportedDrivers']();
+}
+
 export function LoadConnections() {
   return window['go']['connectionsBinding']['ConnectionsBinding']['LoadConnections']();
 }

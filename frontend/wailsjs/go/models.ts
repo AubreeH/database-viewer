@@ -2,6 +2,8 @@ export namespace connections {
 	
 	export class Connection {
 	    name: string;
+	    driver: string;
+	    driver_name: string;
 	    host: string;
 	    port: string;
 	    database: string;
@@ -18,6 +20,8 @@ export namespace connections {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
+	        this.driver = source["driver"];
+	        this.driver_name = source["driver_name"];
 	        this.host = source["host"];
 	        this.port = source["port"];
 	        this.database = source["database"];

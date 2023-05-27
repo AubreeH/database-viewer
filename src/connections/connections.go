@@ -40,6 +40,8 @@ func GetPasswordBehaviours() []PasswordBehaviourDescription {
 // Connection - The base struct for managing connections for this database viewer client.
 type Connection struct {
 	Name             string            `json:"name"`
+	Driver           string            `json:"driver"`
+	DriverName       string            `json:"driver_name"`
 	Host             string            `json:"host"`
 	Port             string            `json:"port"`
 	Database         string            `json:"database"`
@@ -228,6 +230,8 @@ func (connections *Connections) overwriteConnectionInConnections(connection Conn
 
 func (connection *Connection) sanitizeForSaving() Connection {
 	name := connection.Name
+	driver := connection.Driver
+	driverName := connection.DriverName
 	host := connection.Host
 	port := connection.Port
 	user := connection.User
@@ -245,6 +249,8 @@ func (connection *Connection) sanitizeForSaving() Connection {
 
 	return Connection{
 		Name:             name,
+		Driver:           driver,
+		DriverName:       driverName,
 		Host:             host,
 		Port:             port,
 		User:             user,
