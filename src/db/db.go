@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"path/filepath"
 
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -32,8 +33,20 @@ func GetOpenDatabaseConnection(connection connections.Connection) (*database.Dat
 }
 
 func OpenConnection(ctx context.Context, connection connections.Connection) error {
+	var host string
+	var err error
+
+	if connection.Driver == string(database.SQLite) {
+		host, err = filepath.Abs(connection.Host)
+	} else {
+		host = connection.Host
+	}
+	if err != nil {
+		return err
+	}
+
 	db, err := database.SetupDatabase(database.Config{
-		Host:     connection.Host,
+		Host:     host,
 		Port:     connection.Port,
 		Name:     connection.Database,
 		User:     connection.User,

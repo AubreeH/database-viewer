@@ -25,6 +25,7 @@
 				},
 			});
 		} catch (e) {
+			console.error(e);
 			sendErrorNotification({
 				message: "An error occurred whilst establishing connection with " + connection.name,
 			});
@@ -39,6 +40,7 @@
 		try {
 			OpenConnection(connection);
 		} catch (e) {
+			console.error(e);
 			sendErrorNotification({
 				message: "An error occurred whilst establishing connection with " + connection.name,
 			});

@@ -2,11 +2,15 @@ package queryBinding
 
 import (
 	"context"
-	"database/sql"
 
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTables"
+
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTableIndexes"
+
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTableColumns"
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queryBindingTypes"
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/AubreeH/database-viewer/src/db"
-	"github.com/AubreeH/goApiDb/database"
 )
 
 type QueryBinding struct {
@@ -23,200 +27,47 @@ func (q *QueryBinding) GetTables(connection connections.Connection, filter strin
 	if err != nil {
 		return nil, err
 	}
-	rows, err := dbConnection.Db.Query("SHOW TABLES")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
 
-	var tables []string
-
-	for rows.Next() {
-		var table string
-		err := rows.Scan(&table)
-		if err != nil {
-			return nil, err
-		}
-		tables = append(tables, table)
-	}
-
-	return tables, nil
+	return getTables.Handle(dbConnection, connection, filter)
 }
 
-type DatabaseColumn struct {
-	Column     QueryResultColumn
-	Index      *QueryResultIndex
-	ForeignKey *QueryResultKeyColumnUsage
-}
-
-type QueryResultColumn struct {
-	Field    string
-	Type     string
-	Nullable string
-	Key      sql.NullString
-	Default  sql.NullString
-	Extra    sql.NullString
-}
-
-type QueryResultIndex struct {
-	Table        string
-	NonUnique    bool
-	KeyName      string
-	SeqInIndex   uint
-	ColumnName   string
-	Collation    string
-	Cardinality  uint
-	SubPart      sql.NullString
-	Packed       sql.NullString
-	Null         sql.NullString
-	IndexType    string
-	Comment      sql.NullString
-	IndexComment sql.NullString
-}
-
-type QueryResultKeyColumnUsage struct {
-	ConstrainCatalog           string
-	ConstraintSchema           string
-	ConstraintName             string
-	TableCatalog               string
-	TableSchema                string
-	TableName                  string
-	ColumnName                 string
-	OrdinalPosition            int64
-	PositionInUniqueConstraint sql.NullInt64
-	ReferencedTableSchema      sql.NullString
-	ReferencedTableName        sql.NullString
-	ReferencedColumnName       sql.NullString
-}
-
-func (q *QueryBinding) GetTableData(connection connections.Connection, table string) ([]DatabaseColumn, error) {
+func (q *QueryBinding) GetTableData(connection connections.Connection, table string) ([]queryBindingTypes.DatabaseColumn, error) {
 	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
 		return nil, err
 	}
 
-	columns, err := q.getTableColumns(dbConnection, table)
+	columns, err := getTableColumns.Handle(dbConnection, connection, table)
 	if err != nil {
 		return nil, err
 	}
 
-	indexes, err := q.getTableIndexes(dbConnection, table)
+	indexes, err := getTableIndexes.Handle(dbConnection, connection, table)
 	if err != nil {
 		return nil, err
 	}
 
-	keyColumnUsages, err := q.getKeyColumnUsage(dbConnection, table)
-	if err != nil {
-		return nil, err
-	}
-
-	var databaseColumns []DatabaseColumn
+	var databaseColumns []queryBindingTypes.DatabaseColumn
 	for _, c := range columns {
-		column := DatabaseColumn{
+		column := queryBindingTypes.DatabaseColumn{
 			Column: c,
 		}
 		for _, i := range indexes {
-			if i.ColumnName == c.Field {
-				column.Index = &i
+			if i.Column == c.Field {
+				if column.Indexes == nil {
+					column.Indexes = []getTableIndexes.IndexResult{}
+				}
+				column.Indexes = append(column.Indexes, i)
+			} else if i.RefColumn.Valid && i.RefColumn.String == c.Field {
+				if column.RefIndexes == nil {
+					column.RefIndexes = []getTableIndexes.IndexResult{}
+				}
+				column.RefIndexes = append(column.RefIndexes, i)
 			}
 		}
-		for _, i := range keyColumnUsages {
-			if i.ColumnName == c.Field {
-				column.ForeignKey = &i
-			}
-		}
+
 		databaseColumns = append(databaseColumns, column)
 	}
 
 	return databaseColumns, nil
-}
-
-func (q *QueryBinding) getTableColumns(dbConnection *database.Database, table string) ([]QueryResultColumn, error) {
-	rows, err := dbConnection.Db.Query("SHOW COLUMNS FROM " + table)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var columns []QueryResultColumn
-
-	for rows.Next() {
-		var column QueryResultColumn
-		err := rows.Scan(&column.Field, &column.Type, &column.Nullable, &column.Key, &column.Default, &column.Extra)
-		if err != nil {
-			return nil, err
-		}
-		columns = append(columns, column)
-	}
-
-	return columns, nil
-}
-
-func (c *QueryBinding) getTableIndexes(dbConnection *database.Database, table string) ([]QueryResultIndex, error) {
-	rows, err := dbConnection.Db.Query("SHOW INDEXES FROM " + table)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var indexes []QueryResultIndex
-
-	for rows.Next() {
-		var index QueryResultIndex
-		err := rows.Scan(
-			&index.Table,
-			&index.NonUnique,
-			&index.KeyName,
-			&index.SeqInIndex,
-			&index.ColumnName,
-			&index.Collation,
-			&index.Cardinality,
-			&index.SubPart,
-			&index.Packed,
-			&index.Null,
-			&index.IndexType,
-			&index.Comment,
-			&index.IndexComment,
-		)
-		if err != nil {
-			return nil, err
-		}
-		indexes = append(indexes, index)
-	}
-
-	return indexes, nil
-}
-
-func (c *QueryBinding) getKeyColumnUsage(dbConnection *database.Database, table string) ([]QueryResultKeyColumnUsage, error) {
-	rows, err := dbConnection.Db.Query("SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_NAME = ?", table)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var results []QueryResultKeyColumnUsage
-
-	for rows.Next() {
-		var result QueryResultKeyColumnUsage
-		err := rows.Scan(
-			&result.ConstrainCatalog,
-			&result.ConstraintSchema,
-			&result.ConstraintName,
-			&result.TableCatalog,
-			&result.TableSchema,
-			&result.TableName,
-			&result.ColumnName,
-			&result.OrdinalPosition,
-			&result.PositionInUniqueConstraint,
-			&result.ReferencedTableSchema,
-			&result.ReferencedTableName,
-			&result.ReferencedColumnName,
-		)
-		if err != nil {
-			return nil, err
-		}
-		results = append(results, result)
-	}
-
-	return results, nil
 }

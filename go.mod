@@ -8,10 +8,11 @@ require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
+	github.com/tkrajina/typescriptify-golang-structs v0.1.10 // indirect
 )
 
 require (
-	github.com/AubreeH/goApiDb v0.1.18
+	github.com/AubreeH/goApiDb v0.1.28
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/google/uuid v1.1.2 // indirect

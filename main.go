@@ -18,7 +18,6 @@ var assets embed.FS
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
 	conn, connContextCallback := connectionsBinding.NewConnectionsBinding()
 	query, queryContextCallback := queryBinding.NewQueryBinding()
 
@@ -33,12 +32,10 @@ func main() {
 			Assets: assets,
 		},
 		OnStartup: func(ctx context.Context) {
-			app.startup(ctx)
 			connContextCallback(ctx)
 			queryContextCallback(ctx)
 		},
 		Bind: []interface{}{
-			app,
 			conn,
 			query,
 		},

@@ -1,14 +1,8 @@
 <script lang="ts">
 	import { GetTableData } from "../../../../wailsjs/go/queryBinding/QueryBinding";
-	import type {
-		connections,
-		queryBinding,
-	} from "../../../../wailsjs/go/models";
+	import type { connections, queryBindingTypes } from "../../../../wailsjs/go/models";
 	import type { IDatabaseTable } from "../../sidePanels/tableList/types";
-	import {
-		openNewTableViewTab,
-		openTableViewTab,
-	} from "../../../stores/mainView";
+	import { openNewTableViewTab, openTableViewTab } from "../../../stores/mainView";
 
 	export let connection: connections.Connection;
 	export let table: IDatabaseTable;
@@ -25,17 +19,14 @@
 	}
 
 	function handleDblClick(e: MouseEvent, column: queryBinding.DatabaseColumn) {
-		if (column?.ForeignKey?.ReferencedTableName?.String) {
-			if (e.ctrlKey) {
-				openNewTableViewTab(
-					connection,
-					column?.ForeignKey?.ReferencedTableName?.String
-				);
-			} else {
-				openTableViewTab(
-					connection,
-					column?.ForeignKey?.ReferencedTableName?.String
-				);
+		if (Array.isArray(column?.Indexes) && column.Indexes.length) {
+			const foreignKeyIndex = column.Indexes.find((i) => i?.RefColumn?.String !== "");
+			if (foreignKeyIndex !== -1) {
+				if (e.ctrlKey) {
+					openNewTableViewTab(connection, column?.ForeignKey?.ReferencedTableName?.String);
+				} else {
+					openTableViewTab(connection, column?.ForeignKey?.ReferencedTableName?.String);
+				}
 			}
 		}
 	}
