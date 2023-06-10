@@ -7,7 +7,6 @@
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
-    "name": "Aubree",
-    "email": "aubree@blueskylabs.com.au"
+    "name": "Aubree"
   }
 }

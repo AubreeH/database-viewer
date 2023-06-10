@@ -9,3 +9,4 @@ frontend/bin/
 frontend/pkg/
 connections.json
 go.sum
+.vite/

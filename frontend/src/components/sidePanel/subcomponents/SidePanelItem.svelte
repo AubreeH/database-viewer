@@ -9,6 +9,7 @@
 	import { openModal } from "../../../stores/modal";
 	import ModifyConnectionModal from "../../modals/newConnectionModal/ModifyConnectionModal.svelte";
 	import { getNotificationContext } from "../../notifications/functions";
+	import { closeTabsConditionally } from "../../../stores/mainView";
 
 	export let connection: connections.Connection = undefined;
 
@@ -16,12 +17,14 @@
 
 	async function handleClick(e: MouseEvent) {
 		try {
+			const tables = await GetTables(connection, "");
+
 			openNewSidePanel({
 				component: TableList,
 				name: `Database: ${connection.name}`,
 				props: {
 					connection,
-					tables: (await GetTables(connection, "")).map((t) => ({ name: t })),
+					tables: Array.isArray(tables) ? tables.map((t) => ({ name: t })) : [],
 				},
 			});
 		} catch (e) {
@@ -48,6 +51,7 @@
 	}
 
 	function handleDisconnection() {
+		closeTabsConditionally((tab) => tab.connection === connection.name);
 		CloseConnection(connection);
 	}
 

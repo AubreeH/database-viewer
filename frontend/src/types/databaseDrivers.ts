@@ -11,7 +11,7 @@ export const DatabaseDriverStringMap: Map<EDatabaseDrivers, {value: string, disp
     [EDatabaseDrivers.MariaDB, {value: "mysql???mariadb", display: "MariaDB"}],
     [EDatabaseDrivers.MySql, {value: "mysql", display: "MySQL"}],
     [EDatabaseDrivers.PostgreSQL, {value: "postgres", display: "PostgreSQL"}],
-    [EDatabaseDrivers.SQLite, {value: "sqlite3", display: "SQLite"}],
+    [EDatabaseDrivers.SQLite, {value: "sqlite", display: "SQLite"}],
 ])
 
 export const DatabaseDriverIconMap: Map<EDatabaseDrivers, ThemeValueObject> = new Map<EDatabaseDrivers, ThemeValueObject>([

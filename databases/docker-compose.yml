@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: mariadb:10.3-bionic
+    container_name: ${PROJECT_NAME}_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: db
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    ports:
+      - "13306:3306"
+    volumes:
+      - mariadbdata:/var/lib/mysql
+    networks:
+      - goApi
+
+volumes:
+  mariadbdata:
+
+networks:
+  goApi:

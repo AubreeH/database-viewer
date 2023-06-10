@@ -7,12 +7,8 @@
 	}
 
 	$: activeTab = $MainViewStore.activeTab;
-	$: component = !isNaN(Number(activeTab))
-		? $MainViewStore?.tabs[activeTab]?.component
-		: null;
-	$: props = !isNaN(Number(activeTab))
-		? $MainViewStore?.tabs[activeTab]?.props
-		: null;
+	$: component = !isNaN(Number(activeTab)) ? $MainViewStore?.tabs[activeTab]?.component : null;
+	$: props = !isNaN(Number(activeTab)) ? $MainViewStore?.tabs[activeTab]?.props : null;
 
 	// $: {
 	// 	console.log(activeTab, component, props);
@@ -34,6 +30,7 @@
 		grid-row: 3;
 		height: 100%;
 		width: 100%;
+		max-height: 100%;
 		overflow-y: auto;
 		overflow-x: hidden;
 
@@ -43,5 +40,7 @@
 
 	.main-view {
 		border-top: 1px solid var(--divider);
+		max-height: 100%;
+		overflow-y: auto;
 	}
 </style>
