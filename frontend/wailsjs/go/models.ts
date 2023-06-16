@@ -104,3 +104,71 @@ export namespace getTableIndexes {
 
 }
 
+export namespace queryBindingTypes {
+	
+	export class QueryResultColumn {
+	    field: string;
+	    type: string;
+	    data_type: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new QueryResultColumn(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.field = source["field"];
+	        this.type = source["type"];
+	        this.data_type = source["data_type"];
+	    }
+	}
+	export class DatabaseColumn {
+	    column: QueryResultColumn;
+	    indexes: getTableIndexes.IndexResult[];
+	    ref_indexes: getTableIndexes.IndexResult[];
+	
+	    static createFrom(source: any = {}) {
+	        return new DatabaseColumn(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.column = this.convertValues(source["column"], QueryResultColumn);
+	        this.indexes = this.convertValues(source["indexes"], getTableIndexes.IndexResult);
+	        this.ref_indexes = this.convertValues(source["ref_indexes"], getTableIndexes.IndexResult);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	
+	export class QueryResultTableData {
+	    rows: any;
+	
+	    static createFrom(source: any = {}) {
+	        return new QueryResultTableData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.rows = source["rows"];
+	    }
+	}
+
+}
+

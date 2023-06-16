@@ -13,6 +13,7 @@ func getTableColumnsMySQL(dbConnection *database.Database, connection connection
 	qu.Select(
 		"c.COLUMN_NAME as Field",
 		"TRIM(CONCAT(c.COLUMN_TYPE, ' ', c.EXTRA)) as Type",
+		"c.DATA_TYPE as DataType",
 	)
 	qu.From(mysqlTypes.InformationSchemaColumns{}, "c")
 	qu.LeftJoin(mysqlTypes.InformationSchemaKeyColumnUsage{}, "kcu", "c.COLUMN_NAME = kcu.COLUMN_NAME AND c.TABLE_NAME = kcu.TABLE_NAME AND c.TABLE_SCHEMA = kcu.TABLE_SCHEMA")

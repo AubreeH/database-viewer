@@ -8,6 +8,7 @@ import (
 	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTableIndexes"
 
 	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTableColumns"
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queries/getTableData"
 	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queryBindingTypes"
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/AubreeH/database-viewer/src/db"
@@ -70,4 +71,13 @@ func (q *QueryBinding) GetTableData(connection connections.Connection, table str
 	}
 
 	return databaseColumns, nil
+}
+
+func (q *QueryBinding) LoadTableData(connection connections.Connection, table string) (queryBindingTypes.QueryResultTableData, error) {
+	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
+	if err != nil {
+		return queryBindingTypes.QueryResultTableData{}, err
+	}
+
+	return getTableData.Handle(dbConnection, connection, table)
 }

@@ -7,42 +7,47 @@ import (
 )
 
 type DatabaseColumn struct {
-	Column     QueryResultColumn
-	Indexes    []getTableIndexes.IndexResult
-	RefIndexes []getTableIndexes.IndexResult
+	Column     QueryResultColumn             `json:"column"`
+	Indexes    []getTableIndexes.IndexResult `json:"indexes"`
+	RefIndexes []getTableIndexes.IndexResult `json:"ref_indexes"`
 }
 
 type QueryResultColumn struct {
-	Field string
-	Type  string
+	Field    string `json:"field"`
+	Type     string `json:"type"`
+	DataType string `json:"data_type"`
 }
 
 type QueryResultIndex struct {
-	Table        string
-	KeyName      string
-	SeqInIndex   uint
-	ColumnName   string
-	Collation    string
-	Cardinality  uint
-	SubPart      sql.NullString
-	Packed       sql.NullString
-	Null         sql.NullString
-	IndexType    string
-	Comment      sql.NullString
-	IndexComment sql.NullString
+	Table        string         `json:"table"`
+	KeyName      string         `json:"key_name"`
+	SeqInIndex   uint           `json:"seq_in_index"`
+	ColumnName   string         `json:"column_name"`
+	Collation    string         `json:"collation"`
+	Cardinality  uint           `json:"cardinality"`
+	SubPart      sql.NullString `json:"sub_part"`
+	Packed       sql.NullString `json:"packed"`
+	Null         sql.NullString `json:"null"`
+	IndexType    string         `json:"index_type"`
+	Comment      sql.NullString `json:"comment"`
+	IndexComment sql.NullString `json:"index_comment"`
 }
 
 type QueryResultKeyColumnUsage struct {
-	ConstrainCatalog           string
-	ConstraintSchema           string
-	ConstraintName             string
-	TableCatalog               string
-	TableSchema                string
-	TableName                  string
-	ColumnName                 string
-	OrdinalPosition            int64
-	PositionInUniqueConstraint sql.NullInt64
-	ReferencedTableSchema      sql.NullString
-	ReferencedTableName        sql.NullString
-	ReferencedColumnName       sql.NullString
+	ConstraintCatalog          string         `json:"constraint_catalog"`
+	ConstraintSchema           string         `json:"constraint_schema"`
+	ConstraintName             string         `json:"constraint_name"`
+	TableCatalog               string         `json:"table_catalog"`
+	TableSchema                string         `json:"table_schema"`
+	TableName                  string         `json:"table_name"`
+	ColumnName                 string         `json:"column_name"`
+	OrdinalPosition            int64          `json:"ordinal_position"`
+	PositionInUniqueConstraint sql.NullInt64  `json:"position_in_unique_constraint"`
+	ReferencedTableSchema      sql.NullString `json:"referenced_table_schema"`
+	ReferencedTableName        sql.NullString `json:"referenced_table_name"`
+	ReferencedColumnName       sql.NullString `json:"referenced_column_name"`
+}
+
+type QueryResultTableData struct {
+	Rows any `json:"rows"` //[]map[string]interface{}
 }

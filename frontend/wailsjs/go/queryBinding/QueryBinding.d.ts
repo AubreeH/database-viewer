@@ -6,3 +6,5 @@ import {queryBindingTypes} from '../models';
 export function GetTableData(arg1:connections.Connection,arg2:string):Promise<Array<queryBindingTypes.DatabaseColumn>>;
 
 export function GetTables(arg1:connections.Connection,arg2:string):Promise<Array<string>>;
+
+export function LoadTableData(arg1:connections.Connection,arg2:string):Promise<queryBindingTypes.QueryResultTableData>;

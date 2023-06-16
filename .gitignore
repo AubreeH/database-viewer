@@ -11,3 +11,4 @@ frontend/package-lock.json
 connections.json
 go.sum
 .vite/
+frontend/package.json.md5

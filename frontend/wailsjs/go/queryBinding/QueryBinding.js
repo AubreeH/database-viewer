@@ -9,3 +9,7 @@ export function GetTableData(arg1, arg2) {
 export function GetTables(arg1, arg2) {
   return window['go']['queryBinding']['QueryBinding']['GetTables'](arg1, arg2);
 }
+
+export function LoadTableData(arg1, arg2) {
+  return window['go']['queryBinding']['QueryBinding']['LoadTableData'](arg1, arg2);
+}

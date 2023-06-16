@@ -11,7 +11,7 @@ import (
 
 func getTableColumnsSQLite(dbConnection *database.Database, table string) ([]queryBindingTypes.QueryResultColumn, error) {
 	q := query.NewSelectQuery()
-	q.Select("p.name", "p.type")
+	q.Select("p.name", "p.type", "p.type")
 	q.FromTable(fmt.Sprintf("pragma_table_info('%s')", table), "p")
 	result, err := query.ExecuteQuery(dbConnection, q, queryBindingTypes.QueryResultColumn{})
 	if err != nil {

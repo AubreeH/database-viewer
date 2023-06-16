@@ -6,12 +6,20 @@
 	import type { Writable } from "svelte/store";
 
 	const context = getContext("tableView") as Writable<ITableViewContext>;
+
+	export let row: { [key: string]: any };
 </script>
 
-<tr>
-	{#if Array.isArray($context?.columns)}
-		{#each $context?.columns as column, index}
-			<TableCell />
+<tr class="table-row">
+	{#if row && Array.isArray($context.columns)}
+		{#each $context.columns as column}
+			<TableCell value={row[column.column.field]} />
 		{/each}
 	{/if}
 </tr>
+
+<style lang="scss">
+	.table-row:hover {
+		background: var(--hover);
+	}
+</style>
