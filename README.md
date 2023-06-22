@@ -31,3 +31,4 @@ To build a redistributable, production mode package, use `wails build`.
 - [ ] Add csv importing view.
 - [ ] Add bulk actions.
 - [ ] Add custom query view.
+- [ ] Escape column names in goApiDb.
