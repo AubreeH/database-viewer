@@ -13,7 +13,7 @@ type mySqlQueryResult struct {
 	TableName string
 }
 
-func getTablesMySQL(dbConnection *database.Database, connection connections.Connection, filter string) ([]string, error) {
+func getTablesMySQL(dbConnection *database.Database, connection connections.Connection, filter string, offset int) ([]string, error) {
 	q := query.NewSelectQuery()
 	q.Select("t.TABLE_NAME as TableName")
 	q.From(mysqlTypes.InformationSchemaTables{}, "t")

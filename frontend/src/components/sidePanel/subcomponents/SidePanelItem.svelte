@@ -24,13 +24,12 @@
 				name: `Database: ${connection.name}`,
 				props: {
 					connection,
-					tables: Array.isArray(tables) ? tables.map((t) => ({ name: t })) : [],
 				},
 			});
 		} catch (e) {
 			console.error(e);
 			sendErrorNotification({
-				message: "An error occurred whilst establishing connection with " + connection.name,
+				message: `An error occurred whilst establishing connection with <strong>${connection.name}</strong><br/>(${e})`,
 			});
 		}
 	}

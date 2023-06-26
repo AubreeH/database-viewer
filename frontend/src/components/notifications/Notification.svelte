@@ -23,7 +23,7 @@
 		</Icon>
 	{/if}
 	<span>
-		{notification.message}
+		{@html notification.message}
 	</span>
 </div>
 

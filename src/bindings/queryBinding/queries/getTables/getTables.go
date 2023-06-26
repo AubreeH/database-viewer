@@ -7,10 +7,10 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func Handle(dbConnection *database.Database, connection connections.Connection, filter string) ([]string, error) {
+func Handle(dbConnection *database.Database, connection connections.Connection, filter string, offset int) ([]string, error) {
 	switch database.DriverType(connection.Driver) {
 	case database.MySql:
-		return getTablesMySQL(dbConnection, connection, filter)
+		return getTablesMySQL(dbConnection, connection, filter, offset)
 	case database.SQLite:
 		return getTablesSQLite(dbConnection, filter)
 	}

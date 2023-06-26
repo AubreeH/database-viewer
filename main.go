@@ -7,11 +7,14 @@ import (
 	"github.com/AubreeH/database-viewer/src/bindings/connectionsBinding"
 	"github.com/AubreeH/database-viewer/src/bindings/queryBinding"
 
+	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	_ "modernc.org/sqlite"
 )
 
 //go:embed all:frontend/dist

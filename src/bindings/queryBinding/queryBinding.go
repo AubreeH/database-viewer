@@ -23,13 +23,13 @@ func NewQueryBinding() (*QueryBinding, func(context.Context)) {
 	return query, func(c context.Context) { query.ctx = c }
 }
 
-func (q *QueryBinding) GetTables(connection connections.Connection, filter string) ([]string, error) {
+func (q *QueryBinding) GetTables(connection connections.Connection, filter string, offset int) ([]string, error) {
 	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
 		return nil, err
 	}
 
-	return getTables.Handle(dbConnection, connection, filter)
+	return getTables.Handle(dbConnection, connection, filter, offset)
 }
 
 func (q *QueryBinding) GetTableData(connection connections.Connection, table string) ([]queryBindingTypes.DatabaseColumn, error) {

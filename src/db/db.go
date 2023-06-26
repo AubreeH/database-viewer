@@ -46,10 +46,10 @@ func OpenConnection(ctx context.Context, connection connections.Connection) erro
 	}
 
 	db, err := database.SetupDatabase(database.Config{
-		Host:     host,
+		Hostname: host,
 		Port:     connection.Port,
-		Name:     connection.Database,
-		User:     connection.User,
+		Database: connection.Database,
+		Username: connection.User,
 		Password: connection.Password,
 		Driver:   database.DriverType(connection.Driver),
 	})
