@@ -1,24 +1,25 @@
 <script lang="ts">
 	export let name: string = "";
 	export let svg: string = "";
-	export let props: any = undefined;
+	let className: string = "";
+	export { className as class }
 
-	$: iconClass = typeof props?.class === "string" ? `icon ${props.class}` : "icon material-symbols-outlined";
+	$: iconClass = typeof className === "string" ? `icon ${className}` : "icon material-symbols-outlined";
 </script>
 
-<span class={iconClass} {...props}>
+<span class={iconClass} {...$$restProps}>
 	{#if svg}
 		<img src={svg} alt={name} />
 	{:else if name}
 		{name}
 	{:else}
-		<slot />
+		<slot {...$$restProps} />
 	{/if}
 </span>
 
 <style lang="scss">
 	.icon {
 		font-size: inherit;
-		line-height: 1em;
+		line-height: 1;
 	}
 </style>

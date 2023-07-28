@@ -27,7 +27,7 @@ require (
 )
 
 require (
-	github.com/AubreeH/goApiDb v0.2.0
+	github.com/AubreeH/goApiDb v0.2.2
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/google/uuid v1.3.0 // indirect

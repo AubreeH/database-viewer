@@ -8,7 +8,7 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func getTablesSQLite(dbConnection *database.Database, filter string) ([]string, error) {
+func getTablesSQLite(dbConnection *database.Database, filter string, itemsPerPage int, offset int) ([]string, error) {
 	values, err := access.GetAll(dbConnection, sqliteTypes.SQLiteMaster{}, 0)
 	if err != nil {
 		return nil, err

@@ -17,8 +17,6 @@
 
 	async function handleClick(e: MouseEvent) {
 		try {
-			const tables = await GetTables(connection, "");
-
 			openNewSidePanel({
 				component: TableList,
 				name: `Database: ${connection.name}`,
@@ -75,7 +73,7 @@
 	<button {...contextmenu} class="side-panel-item hoverable primary" on:click={handleClick}>
 		<h4>{connection.name}</h4>
 		{#if connection.connected}
-			<Icon name="check_circle" />
+			<Icon name="check_circle" title="test123" />
 		{/if}
 		<p>{connection.database}</p>
 	</button>

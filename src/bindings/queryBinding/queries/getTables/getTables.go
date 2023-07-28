@@ -3,17 +3,20 @@ package getTables
 import (
 	"errors"
 
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queryBindingTypes"
 	"github.com/AubreeH/database-viewer/src/connections"
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func Handle(dbConnection *database.Database, connection connections.Connection, filter string, offset int) ([]string, error) {
+func Handle(dbConnection *database.Database, connection connections.Connection, filter string, offset int) ([]string, *queryBindingTypes.GetPaginationDetailsResult, error) {
+	itemsPerPage := 25
 	switch database.DriverType(connection.Driver) {
 	case database.MySql:
-		return getTablesMySQL(dbConnection, connection, filter, offset)
+		return getTablesMySQL(dbConnection, connection, filter, itemsPerPage, offset)
 	case database.SQLite:
-		return getTablesSQLite(dbConnection, filter)
+		result, err := getTablesSQLite(dbConnection, filter, itemsPerPage, offset)
+		return result, nil, err
 	}
 
-	return nil, errors.New("driver not supported for GetTables query")
+	return nil, nil, errors.New("driver not supported for GetTables query")
 }
