@@ -46,6 +46,7 @@
 		line-height: 1;
 		vertical-align: middle;
 		padding: .375em .625em;
+		margin-right: 1em;
 
 		:global(.table-list-item-chevron) {
 			height: 1.75em;

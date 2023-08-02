@@ -8,12 +8,15 @@
 	import type { ITableViewContext } from "./types";
 	import { writable } from "svelte/store";
 	import HiddenScrollbarContainer from "../../common/hiddenScrollbarContainer/HiddenScrollbarContainer.svelte";
+	import Icon from "../../common/icon/Icon.svelte";
+	import Loader from "../../common/loader/Loader.svelte";
 
 	export let connection: connections.Connection;
 	export let table: IDatabaseTable;
 
 	let columns: queryBindingTypes.DatabaseColumn[] = undefined;
 	let rows: { [key: string]: any }[] = undefined;
+	let loading: boolean = true;
 
 	const context = writable<ITableViewContext>({
 		columns,
@@ -29,9 +32,11 @@
 	$: updateContext({ columns, connection, table, rows });
 
 	async function getTableData(c: connections.Connection, n: string) {
+		loading = true;
 		if (c && n) {
 			columns = await GetTableData(c, n);
 		}
+		loading = false;
 	}
 	$: getTableData(connection, table.name);
 
@@ -43,10 +48,14 @@
 	$: loadTableData(connection, table.name);
 </script>
 
-<table class="table">
-	<TableHeaderRow />
-	<TableBody />
-</table>
+{#if loading || true}
+	<Loader />
+{:else}
+	<table class="table">
+		<TableHeaderRow />
+		<TableBody />
+	</table>
+{/if}
 
 <style lang="scss">
 	.table {

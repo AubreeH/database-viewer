@@ -75,7 +75,7 @@
 		overflow-y: auto;
 
 		width: 100%;
-		padding: 1em;
+		padding: 0;
 
 		grid-column: 1;
 		grid-row: 3;
@@ -90,6 +90,8 @@
 	.side-panel-header {
 		grid-row: 1;
 
+		padding: 1em 1em 0;
+
 		display: grid;
 		grid-template-columns: 1fr 3fr 1fr;
 		align-items: center;
@@ -103,6 +105,7 @@
 		gap: 1em;
 
 		overflow-y: auto;
+		padding: 0 0 1em;
 	}
 
 	.side-panel-footer {

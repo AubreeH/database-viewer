@@ -63,5 +63,6 @@
 		gap: .5em;
 		overflow-y: auto;
 		align-content: start;
+		padding-left: 1em;
 	}
 </style>
