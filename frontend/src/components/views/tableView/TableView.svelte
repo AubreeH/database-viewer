@@ -7,9 +7,8 @@
 	import TableBody from "./subcomponents/TableBody.svelte";
 	import type { ITableViewContext } from "./types";
 	import { writable } from "svelte/store";
-	import HiddenScrollbarContainer from "../../common/hiddenScrollbarContainer/HiddenScrollbarContainer.svelte";
-	import Icon from "../../common/icon/Icon.svelte";
 	import Loader from "../../common/loader/Loader.svelte";
+	import PaginationControls from "../../common/paginationControls/PaginationControls.svelte";
 
 	export let connection: connections.Connection;
 	export let table: IDatabaseTable;
@@ -17,19 +16,26 @@
 	let columns: queryBindingTypes.DatabaseColumn[] = undefined;
 	let rows: { [key: string]: any }[] = undefined;
 	let loading: boolean = true;
+	let page: number = 0;
+	let columnSizes: { [key: string]: number } = {};
 
 	const context = writable<ITableViewContext>({
 		columns,
 		connection,
 		table,
 		rows,
+		columnSizes,
 	});
 	setContext("tableView", context);
 
-	function updateContext(c: ITableViewContext) {
-		context.set(c);
+	function handleExpandColumn(e: CustomEvent<{ name: string; width: number }>) {
+		columnSizes[e.detail.name] = e.detail.width;
 	}
-	$: updateContext({ columns, connection, table, rows });
+
+	function updateContext(c: Partial<ITableViewContext>) {
+		context.update(v => ({ ...v, ...c}));
+	}
+	$: updateContext({ columns, connection, table, rows, columnSizes });
 
 	async function getTableData(c: connections.Connection, n: string) {
 		loading = true;
@@ -40,26 +46,48 @@
 	}
 	$: getTableData(connection, table.name);
 
-	async function loadTableData(c: connections.Connection, n: string) {
-		if (c && n) {
-			rows = (await LoadTableData(c, n))?.rows;
+	async function loadTableData(c: connections.Connection, tableName: string, page: number) {
+		if (c && tableName) {
+			rows = (await LoadTableData(c, tableName, page))?.rows;
 		}
 	}
-	$: loadTableData(connection, table.name);
+	$: loadTableData(connection, table.name, page);
 </script>
 
-{#if loading || true}
+{#if loading}
 	<Loader />
 {:else}
-	<table class="table">
-		<TableHeaderRow />
-		<TableBody />
-	</table>
+	<div class="container">
+		<div class="table-wrapper">
+			<table class="table">
+				<TableHeaderRow on:resize={handleExpandColumn} />
+				<TableBody on:resize={handleExpandColumn} />
+			</table>
+		</div>
+		<PaginationControls bind:offset={page} total={10} />
+	</div>
 {/if}
 
 <style lang="scss">
+	.container {
+		height: 100%;
+		display: grid;
+		grid-template-rows: 1fr auto;
+		gap: .5em;
+		padding-bottom: .5em;
+	}
+
+	.table-wrapper {
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+	}
+
 	.table {
+		height: fit-content;
+		width: fit-content;
 		border-collapse: separate;
 		border-spacing: 0;
+		background: var(--primary);
 	}
 </style>

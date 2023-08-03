@@ -42,5 +42,6 @@
 		border-top: 1px solid var(--divider);
 		max-height: 100%;
 		overflow-y: auto;
+		background: var(--background-dark);
 	}
 </style>

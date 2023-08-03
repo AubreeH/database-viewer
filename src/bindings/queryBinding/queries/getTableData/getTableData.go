@@ -8,12 +8,12 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func Handle(dbConnection *database.Database, connection connections.Connection, table string) (queryBindingTypes.QueryResultTableData, error) {
+func Handle(dbConnection *database.Database, connection connections.Connection, table string, limit, offset uint) (queryBindingTypes.QueryResultTableData, error) {
 	switch database.DriverType(connection.Driver) {
 	case database.MySql:
-		return getTableDataMySQL(dbConnection, connection, table)
+		return getTableDataMySQL(dbConnection, connection, table, limit, offset)
 	case database.SQLite:
-		return getTableDataSQLite(dbConnection, connection, table)
+		return getTableDataSQLite(dbConnection, connection, table, limit, offset)
 	}
 
 	return queryBindingTypes.QueryResultTableData{}, errors.New("driver not supported for GetTableData query")

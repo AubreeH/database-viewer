@@ -7,26 +7,27 @@
 
     function handlePaginate(direction: 1 | -1) {
         let newOffset = offset + direction
-        console.log("newOffset", newOffset);
-        console.log("lowerBound", lowerBound);
-        console.log("total", total)
-        if (lowerBound !== undefined && (offset) < (lowerBound - 1)) {
-            console.log("A");
+        if (lowerBound !== undefined && newOffset < lowerBound) {
             offset = lowerBound
-        } else if (total !== undefined && (offset) > (total - 1)) {
-            console.log("B");
-            offset = total
+        } else if (total !== undefined && newOffset > (total - 1)) {
+            offset = total - 1
         } else {
-            console.log("C");
             offset = newOffset
         }
     }
+
+    $: buttonLeftDisabled = (!!(lowerBound !== undefined && offset <= lowerBound))
+    $: buttonRightDisabled = (!!(total !== undefined && offset >= (total - 1)))
 
     
 </script>
 
 <div class="pagination-controls">
-    <button class="primary" on:click={() => handlePaginate(-1)}>
+    <button 
+        class="primary" 
+        on:click={() => handlePaginate(-1)} 
+        disabled={buttonLeftDisabled}
+    >
         <Icon>
             chevron_left
         </Icon>
@@ -40,7 +41,11 @@
     <span class="pagination-controls-display">
         {total}
     </span>
-    <button class="primary" on:click={() => handlePaginate(1)}>
+    <button 
+        class="primary" 
+        on:click={() => handlePaginate(1)} 
+        disabled={buttonRightDisabled}
+    >
         <Icon>
             chevron_right
         </Icon>

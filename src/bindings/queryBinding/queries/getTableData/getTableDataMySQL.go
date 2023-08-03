@@ -10,13 +10,13 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func getTableDataMySQL(dbConnection *database.Database, connection connections.Connection, table string) (queryBindingTypes.QueryResultTableData, error) {
+func getTableDataMySQL(dbConnection *database.Database, connection connections.Connection, table string, limit, offset uint) (queryBindingTypes.QueryResultTableData, error) {
 	columns, err := getTableColumns.Handle(dbConnection, connection, table)
 	if err != nil {
 		return queryBindingTypes.QueryResultTableData{}, err
 	}
 
-	rows, err := dbConnection.Db.Query(fmt.Sprintf("SELECT * FROM %s LIMIT 100", table))
+	rows, err := dbConnection.Db.Query(fmt.Sprintf("SELECT * FROM %s LIMIT ? OFFSET ?", table), limit, limit*offset)
 	if err != nil {
 		return queryBindingTypes.QueryResultTableData{}, err
 	}

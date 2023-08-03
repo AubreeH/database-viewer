@@ -5,6 +5,11 @@
 	export { className as class }
 
 	$: iconClass = typeof className === "string" ? `icon ${className}` : "icon material-symbols-outlined";
+
+	interface $$Props extends svelteHTML.HTMLAttributes<HTMLSpanElement> {
+
+	}
+
 </script>
 
 <span class={iconClass} {...$$restProps}>

@@ -7,4 +7,4 @@ export function GetTableData(arg1:connections.Connection,arg2:string):Promise<Ar
 
 export function GetTables(arg1:connections.Connection,arg2:string,arg3:number):Promise<queryBindingTypes.GetTablesResult>;
 
-export function LoadTableData(arg1:connections.Connection,arg2:string):Promise<queryBindingTypes.QueryResultTableData>;
+export function LoadTableData(arg1:connections.Connection,arg2:string,arg3:number):Promise<queryBindingTypes.QueryResultTableData>;

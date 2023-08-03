@@ -105,7 +105,7 @@
 		gap: 1em;
 
 		overflow-y: auto;
-		padding: 0 0 1em;
+		padding: 0;
 	}
 
 	.side-panel-footer {

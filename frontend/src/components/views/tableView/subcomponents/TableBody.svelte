@@ -5,13 +5,12 @@
 	import type { Writable } from "svelte/store";
 
 	const context = getContext("tableView") as Writable<ITableViewContext>;
-	$: console.log($context?.rows);
 </script>
 
 <tbody>
 	{#if Array.isArray($context?.rows)}
-		{#each $context?.rows as row}
-			<TableBodyRow {row} />
+		{#each $context?.rows as row, i}
+			<TableBodyRow {row} on:resize showBorder={!!i} />
 		{/each}
 	{/if}
 </tbody>

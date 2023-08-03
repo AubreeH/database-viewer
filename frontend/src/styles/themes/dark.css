@@ -1,11 +1,15 @@
 body.dark {
     --primary: #303038f0;
     --on-primary: #d2d2d2;
+    --on-primary-disabled: #d2d2d280;
     
-    --background: #303038eb;
-    --primary-contrast: #383840eb;
+    --background: #303038;
+    --primary-contrast: #383840;
+    --background-dark: #282830;
+    --background-light: #404048eb;
     --surface: #FFF;
     --on-surface: #000;
+    --on-surface-disabled: #0008;
 
     --active: #20ff50;
     --inactive: #ff2050;
@@ -19,5 +23,9 @@ body.dark {
 
     --divider: #ffffff1a;
     --outline: #606070;
+    --outline-disabled: #60607080;
     --outline-soft: #60607080;
+    --outline-soft-disabled: #60607040;
+    --outline-very-soft: #60607020;
+    --outline-very-soft-disabled: #60607010;
 }

@@ -27,11 +27,11 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:            "myproject",
+		Title:            "Aubree's Database Viewer",
 		Width:            1024,
 		Height:           768,
 		Frameless:        true,
-		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
+		BackgroundColour: &options.RGBA{R: 48, G: 48, B: 56, A: 0},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -48,7 +48,7 @@ func main() {
 		},
 		Windows: &windows.Options{
 			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
+			WindowIsTranslucent:  false,
 		},
 	})
 

@@ -80,11 +80,11 @@ func (q *QueryBinding) GetTableData(connection connections.Connection, table str
 	return databaseColumns, nil
 }
 
-func (q *QueryBinding) LoadTableData(connection connections.Connection, table string) (queryBindingTypes.QueryResultTableData, error) {
+func (q *QueryBinding) LoadTableData(connection connections.Connection, table string, offset uint) (queryBindingTypes.QueryResultTableData, error) {
 	dbConnection, err := db.GetDatabaseConnection(q.ctx, connection)
 	if err != nil {
 		return queryBindingTypes.QueryResultTableData{}, err
 	}
 
-	return getTableData.Handle(dbConnection, connection, table)
+	return getTableData.Handle(dbConnection, connection, table, 100, offset)
 }

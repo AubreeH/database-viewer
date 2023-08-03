@@ -8,6 +8,6 @@ import (
 	"github.com/AubreeH/goApiDb/database"
 )
 
-func getTableDataSQLite(dbConnection *database.Database, connection connections.Connection, table string) (queryBindingTypes.QueryResultTableData, error) {
+func getTableDataSQLite(dbConnection *database.Database, connection connections.Connection, table string, limit, offset uint) (queryBindingTypes.QueryResultTableData, error) {
 	return queryBindingTypes.QueryResultTableData{}, errors.New("getTableData: sqlite not supported")
 }

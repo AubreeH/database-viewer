@@ -1,5 +1,8 @@
 body {
     --border-outline: 1px solid var(--outline);
+    --border-outline-disabled: 1px solid var(--outline-disabled);
     --border-outline-soft: 1px solid var(--outline-soft);
+    --border-outline-very-soft: 1px solid var(--outline-very-soft);
+    --border-outline-soft-disabled: 1px solid var(--outline-soft-disabled);
     --border-dashed: 1px dashed var(--outline);
 }

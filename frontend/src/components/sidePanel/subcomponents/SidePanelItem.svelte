@@ -73,7 +73,7 @@
 	<button {...contextmenu} class="side-panel-item hoverable primary" on:click={handleClick}>
 		<h4>{connection.name}</h4>
 		{#if connection.connected}
-			<Icon name="check_circle" title="test123" />
+			<Icon name="check_circle" title="Connected!" />
 		{/if}
 		<p>{connection.database}</p>
 	</button>
@@ -82,6 +82,7 @@
 <style lang="scss">
 	.side-panel-item {
 		padding: 0.8em;
+		margin-inline: 1em;
 		background-color: var(--primary);
 		display: grid;
 		grid-template-columns: 1fr auto;

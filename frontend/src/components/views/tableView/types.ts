@@ -6,4 +6,5 @@ export interface ITableViewContext {
 	table: IDatabaseTable;
 	columns: queryBindingTypes.DatabaseColumn[];
 	rows: { [key: string]: any }[];
+	columnSizes: { [key: string]: number }
 }

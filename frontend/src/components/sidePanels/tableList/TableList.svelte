@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { fade } from "svelte/transition";
 	import type { connections, queryBindingTypes } from "../../../../wailsjs/go/models";
 	import { GetTables } from "../../../../wailsjs/go/queryBinding/QueryBinding";
 	import Icon from "../../common/icon/Icon.svelte";
 	import PaginationControls from "../../common/paginationControls/PaginationControls.svelte";
 	import TableListItem from "./TableListItem.svelte";
 	import type { IDatabaseTable } from "./types";
+	import Loader from "../../common/loader/Loader.svelte";
 
 	export let connection: connections.Connection;
 	export let connectionName: string = undefined
@@ -36,16 +38,20 @@
 
 </script>
 
-<div class="table-list">
-	<div class="table-list-items">
-		{#if Array.isArray(tables)}
-			{#each tables as table}
-				<TableListItem {table} {connection} />
-			{/each}
-		{/if}
+{#if loading}
+	<Loader />
+{:else}
+	<div class="table-list">
+		<div class="table-list-items">
+			{#if Array.isArray(tables)}
+				{#each tables as table}
+					<TableListItem {table} {connection} />
+				{/each}
+			{/if}
+		</div>
+		<PaginationControls bind:offset={offset} total={details?.total_pages} />
 	</div>
-	<PaginationControls bind:offset={offset} total={details?.total_pages} />
-</div>
+{/if}
 
 
 
