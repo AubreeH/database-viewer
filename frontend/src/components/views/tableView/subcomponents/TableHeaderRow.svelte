@@ -21,6 +21,5 @@
 	.table-header-row {
 		// position: sticky;
 		// top: 0;
-		background: var(--primary-contrast);
 	}
 </style>
