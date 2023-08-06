@@ -63,7 +63,9 @@
 	</div>
 	{#if !Array.isArray($SidePanelStore) || !$SidePanelStore.length}
 		<div class="side-panel-footer">
-			<button class="small icon hoverable primary" title="New Connection" on:click={handleOpenCreateNewConnectionModal}> add </button>
+			<button class="small icon hoverable primary" title="New Connection" on:click={handleOpenCreateNewConnectionModal}> 
+				add 
+			</button>
 		</div>
 	{/if}
 </div>

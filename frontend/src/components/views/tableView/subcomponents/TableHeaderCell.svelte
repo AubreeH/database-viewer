@@ -6,7 +6,6 @@
 	import type { Writable } from "svelte/store";
 
 	export let column: queryBindingTypes.DatabaseColumn;
-	export let index: number = 0;
 	const context = getContext("tableView") as Writable<ITableViewContext>;
 
 	const dispatch = createEventDispatcher();

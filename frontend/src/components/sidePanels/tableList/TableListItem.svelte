@@ -66,6 +66,8 @@
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			text-align: start;
+
+			pointer-events: none;
 		}
 	}
 

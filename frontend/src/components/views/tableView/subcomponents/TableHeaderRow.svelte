@@ -10,8 +10,8 @@
 <thead class="table-header-row">
 	<tr>
 		{#if Array.isArray($context?.columns)}
-			{#each $context.columns as column, index}
-				<TableHeaderCell on:resize {column} {index} />
+			{#each $context.columns as column}
+				<TableHeaderCell on:resize {column} />
 			{/each}
 		{/if}
 	</tr>
