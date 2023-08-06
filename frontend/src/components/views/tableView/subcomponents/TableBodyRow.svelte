@@ -20,13 +20,4 @@
 </tr>
 
 <style lang="scss">
-	.table-row {
-		&.show-border {
-			--top-border: var(--border-outline-soft);
-		}
-
-		&:hover {
-			background: var(--hover);			
-		}
-	}
 </style>
