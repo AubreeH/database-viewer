@@ -50,7 +50,7 @@ func constructQueryRow(columns []queryBindingTypes.QueryResultColumn, columnsOrd
 	interfaceOutput := make(map[string]interface{})
 
 	for _, column := range columns {
-		i, err := mysqlTypes.GetVariableFromMySqlDataType(mysqlTypes.MySqlDataType(column.DataType))
+		i, err := mysqlTypes.GetVariableFromMySqlDataType(mysqlTypes.MySqlDataType(column.DataType), column.IsNullable)
 		if err != nil {
 			return nil, nil, err
 		}

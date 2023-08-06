@@ -110,6 +110,7 @@ export namespace queryBindingTypes {
 	    field: string;
 	    type: string;
 	    data_type: string;
+	    is_nullable: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new QueryResultColumn(source);
@@ -120,6 +121,7 @@ export namespace queryBindingTypes {
 	        this.field = source["field"];
 	        this.type = source["type"];
 	        this.data_type = source["data_type"];
+	        this.is_nullable = source["is_nullable"];
 	    }
 	}
 	export class DatabaseColumn {

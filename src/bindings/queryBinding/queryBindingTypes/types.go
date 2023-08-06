@@ -13,9 +13,10 @@ type DatabaseColumn struct {
 }
 
 type QueryResultColumn struct {
-	Field    string `json:"field"`
-	Type     string `json:"type"`
-	DataType string `json:"data_type"`
+	Field      string `json:"field"`
+	Type       string `json:"type"`
+	DataType   string `json:"data_type"`
+	IsNullable bool   `json:"is_nullable"`
 }
 
 type QueryResultIndex struct {

@@ -18,44 +18,22 @@
 	let columnWidth = 0;
 	$: handleUpdateColumnWidth(columnWidth);
 	function handleUpdateColumnWidth(columnWidth: number) {
-		if (active) {
+		if (hovering) {
 			dispatch("resize", { name: column?.column?.field, width: columnWidth });
 		}
 	}
 
 	let cellInner: HTMLElement = undefined;
-	$: observer = new ResizeObserver(function(mutations) {
-		mutations.forEach(function(mutation) {
-			columnWidth = mutation.contentRect.width;
-		});
-	});
-
-	$: {
-		if (cellInner) {
-			observer.observe(cellInner);
-		}
-	}
-
-	function handleMouseDown() {
-		function handleResetActive() {
-			active = false;
-			window.removeEventListener('mouseup', handleResetActive)
-		}
-
-		active = true;
-		window.addEventListener('mouseup', handleResetActive)
-	}
 </script>
 
 <td class="table-cell">
 	<div 
 		class="table-cell__inner" 
-		style={!active ? `width: ${width} !important;` : undefined} 
+		style={!hovering ? `width: ${width} !important;` : undefined} 
 		bind:this={cellInner}
-		on:mousedown={handleMouseDown}
 	>
-		<div class="text-wrapper">
-			{value}
+		<div class={`text-wrapper${value===null?" null-value":""}${value===""?" empty-value":""}`}>
+			{value === null ? "null" : value === "" ? "empty" : value}
 		</div>
 	</div>
 </td>
@@ -83,6 +61,12 @@
 		box-sizing: border-box;
 		overflow-x: hidden;
 		min-width: 5em;
+
+		display: flex;
+
+		&:active {
+			background: red;
+		}
 	}
 
 	.table-cell__inner:hover, .table-cell__inner:active {
@@ -97,6 +81,11 @@
 		appearance: none;
 	}
 	.text-wrapper {
-		padding: 0.25em 1em;
+		margin: 0.25em 1em;
+
+		&.null-value,
+		&.empty-value {
+			opacity: .5;
+		}
 	}
 </style>

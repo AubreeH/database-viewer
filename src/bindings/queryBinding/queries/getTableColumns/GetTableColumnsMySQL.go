@@ -14,6 +14,7 @@ func getTableColumnsMySQL(dbConnection *database.Database, connection connection
 		"c.COLUMN_NAME as Field",
 		"TRIM(CONCAT(c.COLUMN_TYPE, ' ', c.EXTRA)) as Type",
 		"c.DATA_TYPE as DataType",
+		"CASE WHEN c.IS_NULLABLE = 'YES' THEN true ELSE false END as nullable",
 	)
 	qu.From(mysqlTypes.InformationSchemaColumns{}, "c")
 	qu.LeftJoin(mysqlTypes.InformationSchemaKeyColumnUsage{}, "kcu", "c.COLUMN_NAME = kcu.COLUMN_NAME AND c.TABLE_NAME = kcu.TABLE_NAME AND c.TABLE_SCHEMA = kcu.TABLE_SCHEMA")

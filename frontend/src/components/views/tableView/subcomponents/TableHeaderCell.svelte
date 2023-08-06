@@ -45,6 +45,10 @@
 
 <style lang="scss">
 	.table-header-cell {
+		position: sticky;
+		top:0;
+		background: var(--primary-contrast);
+
 		min-width: 5em;
 		overflow-x: hidden;
 		text-overflow: ellipsis;

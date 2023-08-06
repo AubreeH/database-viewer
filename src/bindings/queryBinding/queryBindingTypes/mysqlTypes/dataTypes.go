@@ -2,7 +2,8 @@ package mysqlTypes
 
 import (
 	"errors"
-	"time"
+
+	"github.com/AubreeH/database-viewer/src/bindings/queryBinding/queryBindingTypes/sqlTypes"
 )
 
 type MySqlDataType string
@@ -42,22 +43,60 @@ const (
 	YEAR       MySqlDataType = "year"
 )
 
-func GetVariableFromMySqlDataType(t MySqlDataType) (interface{}, error) {
+func GetVariableFromMySqlDataType(t MySqlDataType, isNullable bool) (interface{}, error) {
+	if isNullable {
+		return getNullableVariableFromMySqlDataType(t)
+	}
+
+	return getNonNullableVariableFromMySqlDataType(t)
+}
+
+func getNonNullableVariableFromMySqlDataType(t MySqlDataType) (interface{}, error) {
 	switch t {
 	case CHAR, BINARY, VARCHAR, VARBINARY, TEXT, LONGTEXT, MEDIUMTEXT, TINYTEXT, BLOB, LONGBLOB, MEDIUMBLOB, TINYBLOB, SET, ENUM:
 		var s string
 		return &s, nil
 	case INTEGER, INT, BIGINT, MEDIUMINT, SMALLINT, TINYINT, BIT:
-		var i int64
+		// var i int64
+		var i string
 		return &i, nil
 	case DATE, DATETIME, TIMESTAMP, TIME, YEAR:
-		var t time.Time
+		// var t time.Time
+		var t string
 		return &t, nil
 	case DECIMAL:
-		var f float64
+		// var f float64
+		var f string
 		return &f, nil
 	case BOOL, BOOLEAN:
-		var b bool
+		// var b bool
+		var b string
+		return &b, nil
+	}
+
+	return nil, errors.New("unable to find data type " + string(t))
+}
+
+func getNullableVariableFromMySqlDataType(t MySqlDataType) (interface{}, error) {
+	switch t {
+	case CHAR, BINARY, VARCHAR, VARBINARY, TEXT, LONGTEXT, MEDIUMTEXT, TINYTEXT, BLOB, LONGBLOB, MEDIUMBLOB, TINYBLOB, SET, ENUM:
+		var s sqlTypes.NullString
+		return &s, nil
+	case INTEGER, INT, BIGINT, MEDIUMINT, SMALLINT, TINYINT, BIT:
+		// var i queryBindingTypes.QBTNullInt64
+		var i sqlTypes.NullString
+		return &i, nil
+	case DATE, DATETIME, TIMESTAMP, TIME, YEAR:
+		// var t queryBindingTypes.QBTNullTime
+		var t sqlTypes.NullString
+		return &t, nil
+	case DECIMAL:
+		// var f queryBindingTypes.QBTNullFloat64
+		var f sqlTypes.NullString
+		return &f, nil
+	case BOOL, BOOLEAN:
+		// var b queryBindingTypes.QBTNullBool
+		var b sqlTypes.NullString
 		return &b, nil
 	}
 

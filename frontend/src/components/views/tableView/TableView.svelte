@@ -11,6 +11,7 @@
 	let columns: queryBindingTypes.DatabaseColumn[] = undefined;
 	let rows: { [key: string]: any }[] = undefined;
 	let loading: boolean = true;
+	let loadingData: boolean = true;
 	let page: number = 0;
 	let columnSizes: { [key: string]: number } = {};
 
@@ -30,9 +31,11 @@
 	$: getTableData(connection, table.name);
 
 	async function loadTableData(c: connections.Connection, tableName: string, page: number) {
+		loadingData = true;
 		if (c && tableName) {
 			rows = (await LoadTableData(c, tableName, page))?.rows;
 		}
+		loadingData = false;
 	}
 	$: loadTableData(connection, table.name, page);
 
