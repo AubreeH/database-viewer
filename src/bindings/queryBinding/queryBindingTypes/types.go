@@ -50,7 +50,15 @@ type QueryResultKeyColumnUsage struct {
 }
 
 type QueryResultTableData struct {
-	Rows any `json:"rows"` //[]map[string]interface{}
+	Rows    any                            `json:"rows"` //[]map[string]interface{}
+	Details QueryResultTablePaginationData `json:"details"`
+}
+
+type QueryResultTablePaginationData struct {
+	TotalResults uint `json:"total_results"`
+	TotalPages   uint `json:"total_pages"`
+	Limit        uint `json:"limit"`
+	Offset       uint `json:"offset"`
 }
 
 type GetTablesResult struct {

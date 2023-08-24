@@ -11,6 +11,11 @@ import (
 )
 
 func getTableDataMySQL(dbConnection *database.Database, connection connections.Connection, table string, limit, offset uint) (queryBindingTypes.QueryResultTableData, error) {
+	details, err := getTablePaginationData(dbConnection, connection, table, limit, offset)
+	if err != nil {
+		return queryBindingTypes.QueryResultTableData{}, err
+	}
+
 	columns, err := getTableColumns.Handle(dbConnection, connection, table)
 	if err != nil {
 		return queryBindingTypes.QueryResultTableData{}, err
@@ -40,6 +45,7 @@ func getTableDataMySQL(dbConnection *database.Database, connection connections.C
 		outputRows = append(outputRows, interfaceMap)
 	}
 
+	output.Details = details
 	output.Rows = outputRows
 
 	return output, nil
@@ -62,4 +68,33 @@ func constructQueryRow(columns []queryBindingTypes.QueryResultColumn, columnsOrd
 	}
 
 	return anyOutput, interfaceOutput, nil
+}
+
+func getTablePaginationData(dbConnection *database.Database, connection connections.Connection, table string, limit, offset uint) (queryBindingTypes.QueryResultTablePaginationData, error) {
+	result, err := dbConnection.Db.Query(fmt.Sprintf("SELECT COUNT(*) FROM %s", table))
+	if err != nil {
+		return queryBindingTypes.QueryResultTablePaginationData{}, err
+	}
+
+	if !result.Next() {
+		return queryBindingTypes.QueryResultTablePaginationData{}, nil
+	}
+
+	var totalResults uint
+	err = result.Scan(&totalResults)
+	if err != nil {
+		return queryBindingTypes.QueryResultTablePaginationData{}, err
+	}
+
+	totalPages := totalResults / limit
+	if totalResults%limit != 0 {
+		totalPages++
+	}
+
+	return queryBindingTypes.QueryResultTablePaginationData{
+		TotalResults: totalResults,
+		TotalPages:   totalPages,
+		Limit:        limit,
+		Offset:       offset,
+	}, nil
 }

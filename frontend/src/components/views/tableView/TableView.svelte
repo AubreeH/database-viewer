@@ -19,6 +19,7 @@
 	let loadingData: boolean = true;
 	let page: number = 0;
 	let columnSizes: { [key: string]: number } = {};
+	let details: queryBindingTypes.QueryResultTablePaginationData = undefined;
 
 	const context = writable<ITableViewContext>({
 		columns,
@@ -50,7 +51,9 @@
 	async function loadTableData(c: connections.Connection, tableName: string, page: number) {
 		loadingData = true;
 		if (c && tableName) {
-			rows = (await LoadTableData(c, tableName, page))?.rows;
+			const result = (await LoadTableData(c, tableName, page));
+			rows = result?.rows;
+			details = result?.details;
 		}
 		loadingData = false;
 	}
@@ -71,7 +74,7 @@
 				</table>
 			</div>
 		{/if}
-		<PaginationControls bind:offset={page} total={10} />
+		<PaginationControls bind:offset={page} total={details?.total_pages} />
 	</div>
 {/if}
 
